@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://calculadoraproteemvt.com/sitemap.xml
