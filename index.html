@@ -3,22 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Protee — Plataforma de Nutrición & Macros</title>
-<meta name="description" content="Calcula macros, analiza comidas, escanea etiquetas, registra tus días y mira tu progreso. Login por email, dashboard y base de alimentos.">
+<title>Protee — Calculadora de Macros, Registro y Dashboard</title>
+<meta name="description" content="Calcula tus macros con precisión, construye comidas, escanea etiquetas nutricionales, guarda tu progreso y consulta un dashboard claro.">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥗</text></svg>">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.2/dist/tesseract.min.js"></script>
 <style>
-:root{--bg:#f7faf8;--surface:#fff;--text:#1d232a;--muted:#6b7680;--primary:#1fc27a;--primary-2:#0fa46a;--border:#e8edf1;--shadow:0 16px 48px rgba(0,0,0,.08)}
+:root{
+  --bg:#f7faf8;--surface:#fff;--text:#1d232a;--muted:#6b7680;
+  --primary:#1fc27a;--primary-2:#0fa46a;--border:#e8edf1;
+  --shadow:0 16px 48px rgba(0,0,0,.08)
+}
 *{box-sizing:border-box}html,body{height:100%}
-body{margin:0;font-family:Manrope,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:
-radial-gradient(1100px 520px at -10% -10%,#eafff3 0,transparent 60%),
-radial-gradient(900px 440px at 110% 10%,#e9f7ff 0,transparent 55%),
-radial-gradient(800px 380px at 50% 120%,#f7ffe9 0,transparent 60%),
-repeating-linear-gradient(135deg,rgba(0,0,0,.015)0,rgba(0,0,0,.015)2px,transparent 2px,transparent 6px);
-background-attachment:fixed}
+body{
+  margin:0;font-family:Manrope,system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);
+  background:
+    radial-gradient(1100px 520px at -10% -10%,#eafff3 0,transparent 60%),
+    radial-gradient(900px 440px at 110% 10%,#e9f7ff 0,transparent 55%),
+    radial-gradient(800px 380px at 50% 120%,#f7ffe9 0,transparent 60%),
+    repeating-linear-gradient(135deg,rgba(0,0,0,.015)0,rgba(0,0,0,.015)2px,transparent 2px,transparent 6px);
+  background-attachment:fixed
+}
 .wrap{max-width:1200px;margin:0 auto;padding:18px}
 header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
@@ -49,6 +56,7 @@ table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px s
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .tag{display:inline-block;border:1px solid var(--border);padding:2px 8px;border-radius:999px;font-size:.8rem;color:var(--muted);margin-right:6px}
 .ad{border:1px dashed var(--border);border-radius:12px;min-height:80px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.notice{background:#fff7e6;border:1px solid #ffe0a3;border-radius:12px;padding:10px;color:#8a6d1d}
 </style>
 </head>
 <body>
@@ -78,20 +86,54 @@ table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px s
 </header>
 
 <main class="wrap">
-  <!-- HERO -->
-  <section class="card" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-    <div style="flex:1 1 420px">
-      <h1>Tu plataforma diaria para calcular macros, registrar comidas y ver tu progreso.</h1>
-      <p class="small">Calculadora inteligente, analizador de platos, OCR de etiquetas y dashboard. Guarda todo en la nube y úsalo en cualquier dispositivo.</p>
-      <div style="display:flex;gap:10px;margin-top:10px">
-        <button class="btn primary" data-go="calc">Empezar ahora</button>
-        <button class="btn ghost" data-go="home">Ver opciones</button>
+  <!-- HERO (landing con descripción + acceso) -->
+  <section class="card" style="display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:center">
+    <div>
+      <h1 style="font-size:2.2rem;line-height:1.2;margin-top:0">
+        Protee: tu plataforma diaria para calcular macros, registrar comidas y ver tu progreso
+      </h1>
+      <ul class="small" style="margin:10px 0 0; padding-left:18px; line-height:1.6">
+        <li>Calculadora precisa de TDEE, macros por comida e IMC.</li>
+        <li>Analiza platos y crea tus comidas (base ampliada + personalizados).</li>
+        <li>Escanea la <b>etiqueta nutricional</b> con OCR y completa valores.</li>
+        <li>Guarda tu día (peso/%grasa, comidas) y consulta el <b>dashboard</b> de las últimas 2 semanas.</li>
+        <li>Cuenta en la nube: accede desde cualquier dispositivo.</li>
+      </ul>
+      <div style="margin-top:12px">
+        <span class="tag">Rápida</span><span class="tag">Ads-ready</span><span class="tag">PWA-ready</span><span class="tag">ES / EN</span>
       </div>
-      <div style="margin-top:10px">
-        <span class="tag">Rápida</span><span class="tag">Ads-ready</span><span class="tag">PWA-ready</span>
+      <div class="notice" style="margin-top:10px">
+        Consejo: inicia sesión para guardar tus comidas y ver el dashboard completo.
       </div>
     </div>
-    <div class="ad" style="flex:1 1 280px;min-height:140px">Espacio para anuncio / promo</div>
+
+    <div class="card" style="border-radius:16px">
+      <h2 style="margin:6px 0 8px">Accede a tu cuenta</h2>
+      <p class="small" style="margin:0 0 10px">Empieza gratis. Usa Google o tu correo.</p>
+
+      <button id="btnGoogle" class="btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.9 31.9 29.4 35 24 35c-7.2 0-13-5.8-13-13S16.8 9 24 9c3.3 0 6.2 1.2 8.4 3.2l5.7-5.7C34.9 3.1 29.8 1 24 1 11.8 1 2 10.8 2 23s9.8 22 22 22c12 0 21-9 21-21 0-1.3-.1-2.3-.4-3.5z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16.3 18.9 13 24 13c3.3 0 6.2 1.2 8.4 3.2l5.7-5.7C34.9 3.1 29.8 1 24 1 14.2 1 5.9 6.7 2.3 14.7z"/>
+          <path fill="#4CAF50" d="M24 45c5.3 0 10.2-1.8 14-5l-6.5-5c-2.2 1.5-4.9 2.4-7.5 2.4-5.3 0-9.8-3.3-11.5-7.9l-6.6 5C9.8 40.9 16.4 45 24 45z"/>
+          <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.3-4.7 7-11.3 7-5.1 0-9.5-3.3-11.1-7.8l-6.6 5C8.5 39.9 15.7 45 24 45c12 0 21-9 21-21 0-1.3-.1-2.3-.4-3.5z"/>
+        </svg>
+        Entrar con Google
+      </button>
+
+      <div style="height:10px"></div>
+      <div class="small" style="text-align:center;color:#6b7680">o con tu correo</div>
+
+      <div style="height:10px"></div>
+      <label>Correo</label><input id="landingEmail" type="email" placeholder="tu@correo.com">
+      <label>Contraseña</label><input id="landingPass" type="password" placeholder="••••••••">
+
+      <div style="display:flex; gap:10px; margin-top:10px">
+        <button id="landingSignin" class="btn primary" style="flex:1">Iniciar sesión</button>
+        <button id="landingSignup" class="btn ghost" style="flex:1">Crear cuenta</button>
+      </div>
+      <p id="landingMsg" class="small" style="margin-top:8px"></p>
+    </div>
   </section>
 
   <!-- HOME / MENÚ -->
@@ -278,13 +320,14 @@ table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px s
   </div>
 </div>
 
-<!-- AUTH MODAL -->
+<!-- AUTH MODAL (alternativo al panel landing) -->
 <div id="authModal" class="modal">
   <div class="panel">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <h3 id="authTitle">Entrar a Protee</h3>
       <button id="authClose" class="btn ghost">✕</button>
     </div>
+    <label>Nombre (para tu perfil)</label><input id="authName" type="text" placeholder="Tu nombre">
     <label>Email</label><input id="authEmail" type="email" placeholder="tu@correo.com">
     <label>Contraseña</label><input id="authPass" type="password" placeholder="••••••••">
     <div style="display:flex;gap:10px;margin-top:10px">
@@ -296,35 +339,106 @@ table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px s
 </div>
 
 <script>
-// ===== Helpers & Nav =====
+// ===== Utilidades & Navegación =====
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const views=["home","calc","meal","scan","log","dash","profile"];
 function go(v){views.forEach(id=>$("#view-"+id)?.classList.toggle("hidden",id!==v));window.scrollTo(0,0)}
 $$("[data-go]").forEach(x=>x.onclick=()=>go(x.dataset.go));go("home");
-(function(){const c=localStorage.getItem("cookieConsent");if(!c)$("#cookieBanner").classList.remove("hidden");
-$("#cookieAccept").onclick=()=>{localStorage.setItem("cookieConsent","accepted");$("#cookieBanner").classList.add("hidden")};
-$("#cookieDecline").onclick=()=>{localStorage.setItem("cookieConsent","declined");$("#cookieBanner").classList.add("hidden")};})();
 
-// ===== Supabase (tus credenciales) =====
+// Cookies
+(function(){
+  const c=localStorage.getItem("cookieConsent");
+  if(!c)$("#cookieBanner").classList.remove("hidden");
+  $("#cookieAccept").onclick=()=>{localStorage.setItem("cookieConsent","accepted");$("#cookieBanner").classList.add("hidden")};
+  $("#cookieDecline").onclick=()=>{localStorage.setItem("cookieConsent","declined");$("#cookieBanner").classList.add("hidden")};
+})();
+
+// ===== Supabase (URL + anon key del proyecto) =====
 const SUPABASE_URL="https://dnygudxhimjksxedzckl.supabase.co";
 const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-// ===== Auth robusto =====
+// ===== Auto-session tras verificación por email =====
+(async ()=>{
+  const hash = window.location.hash || "";
+  if (hash.includes("access_token") && hash.includes("refresh_token")) {
+    const p = new URLSearchParams(hash.substring(1));
+    const access_token  = p.get("access_token");
+    const refresh_token = p.get("refresh_token");
+    if (access_token && refresh_token) {
+      await sb.auth.setSession({ access_token, refresh_token });
+      history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+})();
+
+// ===== Cabecera: login/logout + modal =====
 const btnLogin=$("#btnLogin"),userBox=$("#userBox"),userEmail=$("#userEmail"),btnLogout=$("#btnLogout");
-const authModal=$("#authModal"),authTitle=$("#authTitle"),authEmail=$("#authEmail"),authPass=$("#authPass"),authMsg=$("#authMsg"),authSubmit=$("#authSubmit"),authSwitch=$("#authSwitch"),authClose=$("#authClose");
+const authModal=$("#authModal"),authTitle=$("#authTitle"),authEmail=$("#authEmail"),
+      authPass=$("#authPass"),authMsg=$("#authMsg"),authSubmit=$("#authSubmit"),
+      authSwitch=$("#authSwitch"),authClose=$("#authClose"),authName=$("#authName");
 let mode="signin";function toast(m){authMsg.textContent=m}
 function openAuth(m="signin"){mode=m;authTitle.textContent=(mode==="signin"?"Entrar a Protee":"Crear cuenta");authMsg.textContent="";authModal.style.display="flex";authEmail.focus()}
 function closeAuth(){authModal.style.display="none"}
 btnLogin.onclick=()=>openAuth("signin");authClose.onclick=closeAuth;authSwitch.onclick=()=>openAuth(mode==="signin"?"signup":"signin");
-authSubmit.onclick=async()=>{const email=authEmail.value.trim(),password=authPass.value.trim();if(!email||!password){toast("Completa correo y contraseña.");return}
-authSubmit.disabled=true;try{if(mode==="signup"){const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin}});
-if(error){if(/exists/i.test(error.message)){const r=await sb.auth.signInWithPassword({email,password});if(r.error)toast("No se pudo iniciar sesión: "+r.error.message);else{toast("Sesión iniciada.");closeAuth();refreshAuthUI()}}else toast("Error registrando: "+error.message)}
-else{if(data?.user&&!data.user.email_confirmed_at){toast("Registro correcto. Revisa tu correo y confirma tu cuenta.")}else{toast("Sesión iniciada.");closeAuth();refreshAuthUI()}}}
-else{const r=await sb.auth.signInWithPassword({email,password});if(r.error)toast("No se pudo iniciar sesión: "+r.error.message);else{toast("Sesión iniciada.");closeAuth();refreshAuthUI()}}}finally{authSubmit.disabled=false}};
-async function ensureProfile(u){try{await sb.from("profiles").upsert({id:u.id,display_name:u.email},{onConflict:"id"})}catch(e){}}
-async function refreshAuthUI(){const {data:{user}}=await sb.auth.getUser();if(user){btnLogin.classList.add("hidden");userBox.classList.remove("hidden");userEmail.textContent=user.email||"";await ensureProfile(user)}else{btnLogin.classList.remove("hidden");userBox.classList.add("hidden");userEmail.textContent=""}}
-sb.auth.onAuthStateChange(async(e)=>{if(e==="SIGNED_IN"||e==="SIGNED_OUT")await refreshAuthUI()});btnLogout.onclick=async()=>{await sb.auth.signOut();await refreshAuthUI()};refreshAuthUI();
+
+async function ensureProfile(user, display_name){
+  try{await sb.from("profiles").upsert({id:user.id,display_name: display_name || user.email},{onConflict:"id"})}catch(e){}
+}
+async function refreshAuthUI(){
+  const { data:{ user } } = await sb.auth.getUser();
+  if(user){btnLogin.classList.add("hidden");userBox.classList.remove("hidden");userEmail.textContent = user.email || "";await ensureProfile(user,(user.user_metadata&&user.user_metadata.display_name)||"")}
+  else{btnLogin.classList.remove("hidden");userBox.classList.add("hidden");userEmail.textContent=""}
+}
+sb.auth.onAuthStateChange(async (e)=>{if(e==="SIGNED_IN"||e==="SIGNED_OUT")await refreshAuthUI()});
+btnLogout.onclick=async()=>{await sb.auth.signOut();await refreshAuthUI()};refreshAuthUI();
+
+authSubmit.onclick=async()=>{
+  const email=authEmail.value.trim(), password=authPass.value.trim(), displayName=(authName.value||"").trim();
+  if(!email||!password){toast("Completa correo y contraseña.");return}
+  authSubmit.disabled=true;
+  try{
+    if(mode==="signup"){
+      const { data, error } = await sb.auth.signUp({ email, password, options:{ emailRedirectTo: window.location.origin, data:{ display_name: displayName || email } }});
+      if(error){
+        if(/exists/i.test(error.message)){const r=await sb.auth.signInWithPassword({email,password}); if(r.error)toast("No se pudo iniciar sesión: "+r.error.message); else{toast("Sesión iniciada.");closeAuth();refreshAuthUI()}}
+        else toast("Error registrando: "+error.message);
+      }else{
+        if(data?.user && !data.user.email_confirmed_at){toast("Registro correcto. Revisa tu correo y confirma tu cuenta.");}
+        else {await ensureProfile(data.user,displayName);toast("Sesión iniciada.");closeAuth();refreshAuthUI();}
+      }
+    }else{
+      const r=await sb.auth.signInWithPassword({email,password}); if(r.error)toast("No se pudo iniciar sesión: "+r.error.message); else{toast("Sesión iniciada.");closeAuth();refreshAuthUI();}
+    }
+  }finally{authSubmit.disabled=false}
+};
+
+// ===== Panel landing: Google + email =====
+const landingEmail=$("#landingEmail"),landingPass=$("#landingPass"),landingMsg=$("#landingMsg");
+$("#btnGoogle").onclick=async()=>{
+  try{
+    const { error } = await sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin }});
+    if(error) landingMsg.textContent = "No se pudo abrir Google: "+error.message;
+  }catch(e){ landingMsg.textContent = "Error: "+e.message }
+};
+$("#landingSignin").onclick=async()=>{
+  landingMsg.textContent="";
+  try{
+    const { error } = await sb.auth.signInWithPassword({ email: landingEmail.value.trim(), password: landingPass.value.trim() });
+    if(error) landingMsg.textContent = "Inicio de sesión fallido: "+error.message; else { landingMsg.textContent="Sesión iniciada ✅"; refreshAuthUI(); }
+  }catch(e){ landingMsg.textContent="Error: "+e.message }
+};
+$("#landingSignup").onclick=async()=>{
+  landingMsg.textContent="";
+  try{
+    const { data, error } = await sb.auth.signUp({ email: landingEmail.value.trim(), password: landingPass.value.trim(), options:{ emailRedirectTo: window.location.origin }});
+    if(error) landingMsg.textContent = "No se pudo registrar: "+error.message;
+    else{
+      if(data?.user && !data.user.email_confirmed_at){ landingMsg.textContent="Revisa tu correo y confirma para entrar."; }
+      else { landingMsg.textContent="Cuenta creada y sesión iniciada ✅"; refreshAuthUI(); }
+    }
+  }catch(e){ landingMsg.textContent="Error: "+e.message }
+};
 
 // ===== Calculadora =====
 function round(n,d=0){return Math.round((+n+Number.EPSILON)*10**d)/10**d}
@@ -334,14 +448,17 @@ function goalFactor(g){return g==='cut'?0.8:(g==='bulk'?1.12:1)}
 function proteinTarget(m,kg,bfp){if(m==='lbm2.2'&&bfp){const lbm=kg*(1-bfp/100);return lbm*2.2}if(m==='bw2.0')return kg*2;return kg*1.8}
 function updateBMI(){const w=+$("#weight").value||0,h=+$("#height").value||0;if(!w||!h){$("#bmi").value="";return}const {kg,cm}=toMetric(w,h);const m=cm/100;$("#bmi").value=round(kg/(m*m),1)}
 $("#weight").oninput=updateBMI;$("#height").oninput=updateBMI;$("#units").onchange=()=>{$$(".unit-h").forEach(e=>e.textContent=$("#units").value==='metric'?'cm':'in');$$(".unit-w").forEach(e=>e.textContent=$("#units").value==='metric'?'kg':'lb');updateBMI()};
-$("#calcTDEE").onclick=function(){const d={sex:$("#sex").value,age:+$("#age").value,height:+$("#height").value,weight:+$("#weight").value,units:$("#units").value,activity:+$("#activity").value,goal:$("#goal").value,bfp:+$("#bfp").value||null,proteinMethod:$("#proteinMethod").value,minFat:+$("#minFat").value,meals:+$("#meals").value};
-if(!d.age||!d.height||!d.weight){alert("Completa edad, altura y peso.");return}
-const {kg,cm}=toMetric(d.weight,d.height);const bmr=mifflin(d.sex,kg,cm,d.age);const tdee=bmr*d.activity;const target=tdee*goalFactor(d.goal);
-let prot=proteinTarget(d.proteinMethod,kg,d.bfp||0);let fat=Math.max(kg*d.minFat,0);let remain=target-(prot*4+fat*9);let carb=Math.max(remain/4,0);
-if(remain<0){let minProt=kg*1.6,p=prot;while(remain<0&&p>minProt){p-=0.1;remain=target-(p*4+fat*9)}prot=p;carb=Math.max(remain/4,0)}
-$("#kpiBMR").textContent=round(bmr,0);$("#kpiTDEE").textContent=round(tdee,0);$("#kpiTarget").textContent=round(target,0);
-$("#perMeals").textContent=d.meals;$("#macroTable").innerHTML=[{k:"Proteína",g:prot,kcal:prot*4},{k:"Carbohidratos",g:carb,kcal:carb*4},{k:"Grasas",g:fat,kcal:fat*9}]
-.map(r=>`<tr><td>${r.k}</td><td>${round(r.g,1)} g</td><td>${round(r.kcal,0)} kcal</td><td>${round(r.g/d.meals,1)} g</td></tr>`).join("");$("#results").classList.remove("hidden")};
+$("#calcTDEE").onclick=function(){
+  const d={sex:$("#sex").value,age:+$("#age").value,height:+$("#height").value,weight:+$("#weight").value,units:$("#units").value,activity:+$("#activity").value,goal:$("#goal").value,bfp:+$("#bfp").value||null,proteinMethod:$("#proteinMethod").value,minFat:+$("#minFat").value,meals:+$("#meals").value};
+  if(!d.age||!d.height||!d.weight){alert("Completa edad, altura y peso.");return}
+  const {kg,cm}=toMetric(d.weight,d.height);const bmr=mifflin(d.sex,kg,cm,d.age);const tdee=bmr*d.activity;const target=tdee*goalFactor(d.goal);
+  let prot=proteinTarget(d.proteinMethod,kg,d.bfp||0);let fat=Math.max(kg*d.minFat,0);let remain=target-(prot*4+fat*9);let carb=Math.max(remain/4,0);
+  if(remain<0){let minProt=kg*1.6,p=prot;while(remain<0&&p>minProt){p-=0.1;remain=target-(p*4+fat*9)}prot=p;carb=Math.max(remain/4,0)}
+  $("#kpiBMR").textContent=round(bmr,0);$("#kpiTDEE").textContent=round(tdee,0);$("#kpiTarget").textContent=round(target,0);
+  $("#perMeals").textContent=d.meals;$("#macroTable").innerHTML=[{k:"Proteína",g:prot,kcal:prot*4},{k:"Carbohidratos",g:carb,kcal:carb*4},{k:"Grasas",g:fat,kcal:fat*9}]
+    .map(r=>`<tr><td>${r.k}</td><td>${round(r.g,1)} g</td><td>${round(r.kcal,0)} kcal</td><td>${round(r.g/d.meals,1)} g</td></tr>`).join("");
+  $("#results").classList.remove("hidden")
+};
 
 // ===== Base de alimentos & comidas =====
 const BASE_DB=[{name:"Pechuga de pollo (cocida, sin piel)",kcal:165,p:31,c:0,f:3.6},{name:"Clara de huevo",kcal:52,p:11,c:0.7,f:0.2},{name:"Huevo entero",kcal:143,p:13,c:0.7,f:9.5},{name:"Arroz blanco cocido",kcal:130,p:2.7,c:28,f:0.3},{name:"Arroz integral cocido",kcal:123,p:2.6,c:25.6,f:1},{name:"Quinua cocida",kcal:120,p:4.4,c:21.3,f:1.9},{name:"Avena (seca)",kcal:389,p:16.9,c:66.3,f:6.9},{name:"Yogur griego natural",kcal:97,p:10,c:3.6,f:5},{name:"Atún en agua (drenado)",kcal:132,p:29,c:0,f:1},{name:"Salmón",kcal:208,p:20,c:0,f:13},{name:"Carne magra (lomo res)",kcal:191,p:29,c:0,f:7.6},{name:"Lentejas cocidas",kcal:116,p:9,c:20,f:0.4},{name:"Garbanzos cocidos",kcal:164,p:8.9,c:27.4,f:2.6},{name:"Pan integral",kcal:250,p:9,c:45,f:3},{name:"Mantequilla de maní",kcal:588,p:25,c:20,f:50},{name:"Leche descremada",kcal:34,p:3.4,c:5,f:0.1},{name:"Palta (aguacate)",kcal:160,p:2,c:9,f:15}];
@@ -351,55 +468,73 @@ function DB(){return[...BASE_DB,...loadCustom()]}
 function findFoods(q){const s=q.toLowerCase();return DB().filter(it=>it.name.toLowerCase().includes(s)).slice(0,12)}
 function foodByName(n){return DB().find(x=>x.name.toLowerCase()===n.toLowerCase())}
 function renderSuggestions(list){$("#foodSuggestions").innerHTML=list.map(it=>`<span class="tag">${it.name}</span>`).join(" ")}
-let MEAL=[];function renderMeal(){const rows=MEAL.map((it,i)=>`<tr><td>${it.name}</td><td>${round(it.grams,0)}</td><td>${round(it.kcal,0)}</td><td>${round(it.p,1)}</td><td>${round(it.c,1)}</td><td>${round(it.f,1)}</td><td><button class="btn ghost" data-rm="${i}">✖</button></td></tr>`).join("");
-$("#mealBody").innerHTML=rows||`<tr><td colspan="7" class="small" style="color:#6b7680">Aún no hay alimentos.</td></tr>`;
-const t=MEAL.reduce((a,x)=>({grams:a.grams+x.grams,kcal:a.kcal+x.kcal,p:a.p+x.p,c:a.c+x.c,f:a.f+x.f}),{grams:0,kcal:0,p:0,c:0,f:0});
-$("#tQty").textContent=round(t.grams,0);$("#tKcal").textContent=round(t.kcal,0);$("#tP").textContent=round(t.p,1);$("#tC").textContent=round(t.c,1);$("#tF").textContent=round(t.f,1);
-$$("#mealBody [data-rm]").forEach(b=>b.onclick=()=>{MEAL.splice(+b.dataset.rm,1);renderMeal()})}
+let MEAL=[];function renderMeal(){
+  const rows=MEAL.map((it,i)=>`<tr><td>${it.name}</td><td>${round(it.grams,0)}</td><td>${round(it.kcal,0)}</td><td>${round(it.p,1)}</td><td>${round(it.c,1)}</td><td>${round(it.f,1)}</td><td><button class="btn ghost" data-rm="${i}">✖</button></td></tr>`).join("");
+  $("#mealBody").innerHTML=rows||`<tr><td colspan="7" class="small" style="color:#6b7680">Aún no hay alimentos.</td></tr>`;
+  const t=MEAL.reduce((a,x)=>({grams:a.grams+x.grams,kcal:a.kcal+x.kcal,p:a.p+x.p,c:a.c+x.c,f:a.f+x.f}),{grams:0,kcal:0,p:0,c:0,f:0});
+  $("#tQty").textContent=round(t.grams,0);$("#tKcal").textContent=round(t.kcal,0);$("#tP").textContent=round(t.p,1);$("#tC").textContent=round(t.c,1);$("#tF").textContent=round(t.f,1);
+  $$("#mealBody [data-rm]").forEach(b=>b.onclick=()=>{MEAL.splice(+b.dataset.rm,1);renderMeal()})
+}
 $("#foodSearch").oninput=e=>renderSuggestions(findFoods(e.target.value));
 $("#addFood").onclick=()=>{const q=$("#foodSearch").value.trim(),g=+$("#qty").value;if(!q||!g){alert("Indica alimento y gramos.");return}
-const f=findFoods(q)[0];const base=f?foodByName(f.name):null;if(!base){alert("No encontrado. Añádelo como personalizado.");return}
-const factor=g/100;MEAL.push({name:base.name,grams:g,kcal:base.kcal*factor,p:base.p*factor,c:base.c*factor,f:base.f*factor});renderMeal()};
+  const f=findFoods(q)[0];const base=f?foodByName(f.name):null;if(!base){alert("No encontrado. Añádelo como personalizado.");return}
+  const factor=g/100;MEAL.push({name:base.name,grams:g,kcal:base.kcal*factor,p:base.p*factor,c:base.c*factor,f:base.f*factor});renderMeal()};
 $("#newFood").onclick=()=>{document.getElementById("cfName").focus();window.scrollTo({top:document.getElementById("cfName").getBoundingClientRect().top+window.scrollY-100,behavior:"smooth"})};
 $("#addCustom").onclick=()=>{const x={name:$("#cfName").value.trim(),kcal:+$("#cfKcal").value,p:+$("#cfP").value,c:+$("#cfC").value,f:+$("#cfF").value};
-if(!x.name||[x.kcal,x.p,x.c,x.f].some(v=>isNaN(v))){$("#customMsg").textContent="Completa todos los campos numéricos.";return}
-saveCustom(x);$("#customMsg").textContent=`“${x.name}” añadido. Ya puedes buscarlo.`;renderSuggestions(findFoods($("#foodSearch").value))};
+  if(!x.name||[x.kcal,x.p,x.c,x.f].some(v=>isNaN(v))){$("#customMsg").textContent="Completa todos los campos numéricos.";return}
+  saveCustom(x);$("#customMsg").textContent=`“${x.name}” añadido. Ya puedes buscarlo.`;renderSuggestions(findFoods($("#foodSearch").value))};
 $("#clearMeal").onclick=()=>{MEAL=[];renderMeal()};
 
-// Guardar comida en la nube
+// Guardar comida en la nube (tabla: meal_entries)
 $("#saveMealCloud").onclick=async()=>{const {data:{user}}=await sb.auth.getUser();if(!user){alert("Inicia sesión para guardar en la nube.");return}
-if(!MEAL.length){alert("No hay alimentos en la comida.");return}
-const tot=MEAL.reduce((a,x)=>({k:a.k+x.kcal,p:a.p+x.p,c:a.c+x.c,f:a.f+x.f}),{k:0,p:0,c:0,f:0});const today=new Date().toISOString().slice(0,10);
-const {error}=await sb.from("meal_entries").insert({user_id:user.id,date:today,items:MEAL,kcal:round(tot.k,0),protein:round(tot.p,1),carbs:round(tot.c,1),fat:round(tot.f,1)});
-if(error)alert("Error: "+error.message);else alert("Comida guardada para hoy.")};
+  if(!MEAL.length){alert("No hay alimentos en la comida.");return}
+  const tot=MEAL.reduce((a,x)=>({k:a.k+x.kcal,p:a.p+x.p,c:a.c+x.c,f:a.f+x.f}),{k:0,p:0,c:0,f:0});const today=new Date().toISOString().slice(0,10);
+  const {error}=await sb.from("meal_entries").insert({user_id:user.id,date:today,items:MEAL,kcal:round(tot.k,0),protein:round(tot.p,1),carbs:round(tot.c,1),fat:round(tot.f,1)});
+  if(error)alert("Error: "+error.message);else alert("Comida guardada para hoy.")
+};
 
 // ===== OCR etiqueta =====
 $("#scanBtn").onclick=async()=>{const file=$("#labelFile").files[0];if(!file){alert("Sube una imagen.");return}
-$("#scanOut").textContent="Procesando imagen…";try{const {data:{text}}=await Tesseract.recognize(file,'spa+eng');$("#scanOut").textContent=(text||"").slice(0,400)+"…";
-const kcal=(text.match(/(?:calor[ií]as|calories?)\D{0,10}(\d{2,4})/i)||[])[1];const p=(text.match(/(?:prote[ií]na|protein)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];
-const c=(text.match(/(?:carbohidratos?|carbs?)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];const f=(text.match(/(?:grasas?|fat)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];
-$("#scanForm").classList.remove("hidden");$("#lblKcal").value=kcal?kcal.replace(",","."):"";$("#lblP").value=p?p.replace(",","."):"";$("#lblC").value=c?c.replace(",","."):"";$("#lblF").value=f?f.replace(",","."):""}
-catch(e){$("#scanOut").textContent="No se pudo leer la imagen. Intenta con mejor iluminación y enfoque."}};
+  $("#scanOut").textContent="Procesando imagen…";
+  try{
+    const {data:{text}}=await Tesseract.recognize(file,'spa+eng');$("#scanOut").textContent=(text||"").slice(0,400)+"…";
+    const kcal=(text.match(/(?:calor[ií]as|calories?)\D{0,10}(\d{2,4})/i)||[])[1];
+    const p=(text.match(/(?:prote[ií]na|protein)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];
+    const c=(text.match(/(?:carbohidratos?|carbs?)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];
+    const f=(text.match(/(?:grasas?|fat)\D{0,10}(\d{1,3}(?:[.,]\d)?)/i)||[])[1];
+    $("#scanForm").classList.remove("hidden");
+    $("#lblKcal").value=kcal?kcal.replace(",","."):"";$("#lblP").value=p?p.replace(",","."):"";$("#lblC").value=c?c.replace(",","."):"";$("#lblF").value=f?f.replace(",","."):"";
+  }catch(e){$("#scanOut").textContent="No se pudo leer la imagen. Intenta con mejor iluminación y enfoque."}
+};
 $("#addFromLabel").onclick=()=>{const x={name:$("#lblName").value||"Producto",kcal:+$("#lblKcal").value,p:+$("#lblP").value,c:+$("#lblC").value,f:+$("#lblF").value};
-if([x.kcal,x.p,x.c,x.f].some(v=>isNaN(v))){alert("Completa valores numéricos.");return}saveCustom(x);alert("Añadido a tu base local. Próximamente sincronía en la nube.")};
+  if([x.kcal,x.p,x.c,x.f].some(v=>isNaN(v))){alert("Completa valores numéricos.");return}
+  saveCustom(x);alert("Añadido a tu base local. Próximamente sincronía en la nube.")
+};
 
-// ===== Registro diario =====
+// ===== Registro diario (tabla: weight_logs) =====
 $("#saveDaily").onclick=async()=>{const {data:{user}}=await sb.auth.getUser();if(!user){alert("Inicia sesión.");return}
-const date=$("#logDate").value||new Date().toISOString().slice(0,10);const weight=+$("#logWeight").value||null,bf=+$("#logBf").value||null;let e1=null;
-if(weight){const r=await sb.from("weight_logs").insert({user_id:user.id,date,weight,body_fat:bf});e1=r.error}
-$("#logMsg").textContent=(e1)?"Hubo un error guardando datos.":"Registro guardado ✅"};
+  const date=$("#logDate").value||new Date().toISOString().slice(0,10);const weight=+$("#logWeight").value||null,bf=+$("#logBf").value||null;
+  let e1=null;if(weight){const r=await sb.from("weight_logs").insert({user_id:user.id,date,weight,body_fat:bf});e1=r.error}
+  $("#logMsg").textContent=(e1)?"Hubo un error guardando datos.":"Registro guardado ✅"
+};
 
 // ===== Dashboard =====
-let chartCal=null,chartMac=null;async function loadDash(){const {data:{user}}=await sb.auth.getUser();if(!user){alert("Inicia sesión.");return}
-const {data,error}=await sb.from("meal_entries").select("*").eq("user_id",user.id).order("date",{ascending:true}).limit(14);if(error){alert(error.message);return}
-const labels=data.map(r=>r.date),kcals=data.map(r=>r.kcal),p=data.map(r=>r.protein),c=data.map(r=>r.carbs),f=data.map(r=>r.fat);
-chartCal&&chartCal.destroy();chartMac&&chartMac.destroy();
-chartCal=new Chart(document.getElementById("chartCalories").getContext("2d"),{type:"line",data:{labels,datasets:[{label:"Calorías",data:kcals}]},options:{responsive:true}});
-chartMac=new Chart(document.getElementById("chartMacros").getContext("2d"),{type:"bar",data:{labels,datasets:[{label:"Proteína",data:p},{label:"Carbohidratos",data:c},{label:"Grasas",data:f}]},options:{responsive:true}})}
+let chartCal=null,chartMac=null;async function loadDash(){
+  const {data:{user}}=await sb.auth.getUser();if(!user){alert("Inicia sesión.");return}
+  const {data,error}=await sb.from("meal_entries").select("*").eq("user_id",user.id).order("date",{ascending:true}).limit(14);
+  if(error){alert(error.message);return}
+  const labels=data.map(r=>r.date),kcals=data.map(r=>r.kcal),p=data.map(r=>r.protein),c=data.map(r=>r.carbs),f=data.map(r=>r.fat);
+  chartCal&&chartCal.destroy();chartMac&&chartMac.destroy();
+  chartCal=new Chart(document.getElementById("chartCalories").getContext("2d"),{type:"line",data:{labels,datasets:[{label:"Calorías",data:kcals}]},options:{responsive:true}});
+  chartMac=new Chart(document.getElementById("chartMacros").getContext("2d"),{type:"bar",data:{labels,datasets:[{label:"Proteína",data:p},{label:"Carbohidratos",data:c},{label:"Grasas",data:f}]},options:{responsive:true}})
+}
 $("#refreshDash").onclick=loadDash;
 
-// ===== Preferencias =====
+// ===== Preferencias locales =====
 $("#savePrefs").onclick=()=>{localStorage.setItem("lang",$("#prefLang").value);localStorage.setItem("theme",$("#prefTheme").value);alert("Preferencias guardadas.")};
+
+// ===== Idioma selector (placeholder para escalar) =====
+$("#lang").onchange=(e)=>{const v=e.target.value;localStorage.setItem("lang",v);alert("Idioma: "+v+" (base lista para ampliar textos).")};
 </script>
 </body>
 </html>
