@@ -3,49 +3,161 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ProteeMVT — Calculadora Nutricional</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
+  <title>ProteeMVT — Calculadora & Seguimiento</title>
+
+  <!-- Tipografías redondeadas y modernas -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
+
   <style>
-    :root{--green:#2e8b57;--green-2:#3cb371;--bg:#f4fdf6}
+    :root{
+      --green:#2e8b57;            /* principal */
+      --green-2:#3cb371;          /* acento */
+      --green-3:#e9fbf1;          /* fondo claro */
+      --ink:#21312b;              /* texto */
+      --muted:#6c7c75;           /* texto suave */
+      --card:#ffffff;            /* tarjeta */
+      --ring:rgba(46,139,87,.25);
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:'Nunito',sans-serif;background:var(--bg);color:#333}
-    header{background:linear-gradient(90deg,var(--green),var(--green-2));color:#fff;padding:24px;text-align:center}
-    header h1{margin:0;font-size:28px}
-    header p{margin:8px 0 0;opacity:.9}
-    .wrap{max-width:840px;margin:24px auto;padding:16px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.08);padding:22px}
-    .row{display:grid;gap:16px}
-    .row-2{grid-template-columns:1fr}
-    @media(min-width:860px){.row-2{grid-template-columns:1.2fr .8fr}}
-    h2{margin:0 0 12px;color:var(--green)}
-    label{font-weight:700;font-size:14px}
-    input{width:100%;padding:12px;border:1px solid #d9d9d9;border-radius:10px;font-size:15px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer;transition:.2s}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:'Poppins','Nunito',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(80vw 60vh at 80% 10%, rgba(60,179,113,.12), transparent 60%),
+        radial-gradient(60vw 60vh at 0% 30%, rgba(46,139,87,.10), transparent 60%),
+        linear-gradient(180deg, #f7fdf9 0%, var(--green-3) 100%);
+      min-height:100dvh;
+    }
+
+    /* ====== HERO ====== */
+    .hero{
+      position:relative;
+      overflow:hidden;
+      padding: clamp(36px, 6vw, 72px) 16px 24px;
+      text-align:center;
+      background:
+        radial-gradient(1200px 200px at 50% -50px, rgba(46,139,87,.55), rgba(60,179,113,.55)),
+        linear-gradient(90deg, var(--green), var(--green-2));
+      color:#fff;
+    }
+    .hero .badge{
+      display:inline-block;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.18);
+      padding:8px 12px;border-radius:999px;font-size:12px
+    }
+    .hero h1{
+      margin:14px auto 8px;
+      font-weight:900;
+      font-size: clamp(28px, 5.2vw, 52px);
+      line-height:1.05;
+      text-shadow:0 6px 28px rgba(0,0,0,.18);
+    }
+    .hero p{
+      margin:8px auto 0;
+      max-width:820px;
+      font-size: clamp(14px, 2.5vw, 18px);
+      opacity:.95;
+    }
+
+    /* ====== CONTENEDOR ====== */
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px 48px}
+
+    /* ====== INFO BLOQUES ====== */
+    .features{
+      margin-top:18px;
+      display:grid;gap:18px;
+      grid-template-columns:1fr; 
+    }
+    @media(min-width:860px){ .features{grid-template-columns:repeat(3,1fr)} }
+    .feat{
+      background:var(--card);border-radius:20px;padding:18px;
+      box-shadow:0 12px 30px rgba(24,71,52,.08);
+      border:1px solid rgba(46,139,87,.08);
+    }
+    .feat h3{margin:0 0 8px;font-size:18px;color:var(--green)}
+    .feat p{margin:0;color:var(--muted);font-size:14px}
+
+    /* ====== AUTH CARD ====== */
+    .grid-2{display:grid;gap:20px;grid-template-columns:1fr}
+    @media(min-width:980px){.grid-2{grid-template-columns:1.1fr .9fr}}
+
+    .card{
+      background:var(--card);border-radius:22px;padding:22px;
+      box-shadow:0 16px 36px rgba(24,71,52,.10);
+      border:1px solid rgba(46,139,87,.10);
+    }
+    h2{margin:0 0 10px;font-size:22px;color:var(--green)}
+    label{font-weight:700;font-size:13px}
+    input{
+      width:100%;padding:12px 14px;
+      border:1px solid #dfe9e4;border-radius:12px;font-size:15px;outline:none;
+      transition:border .15s, box-shadow .15s, transform .03s;
+      background:#fff;
+    }
+    input:focus{border-color:var(--green-2);box-shadow:0 0 0 3px var(--ring)}
+    .row{display:grid;gap:12px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;padding:13px 16px;border-radius:12px;border:1px solid transparent;
+      font-weight:800;cursor:pointer;transition:.18s;background:#fff;color:var(--ink)
+    }
+    .btn:active{transform:translateY(1px)}
     .btn-primary{background:var(--green-2);color:#fff}
-    .btn-primary:hover{filter:brightness(.95)}
-    .btn-google{background:#fff;border:1px solid #ddd}
-    .muted{font-size:13px;color:#777}
-    nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    nav a{padding:8px 10px;border-radius:8px;text-decoration:none;background:#eef8f0;color:#155b37;font-weight:700}
-    .hide{display:none}
-    .ok{color:#0a7a3d}
+    .btn-primary:hover{filter:brightness(.97)}
+    .btn-soft{border-color:#e3efe9;background:#f7fcf9}
+    .muted{color:var(--muted);font-size:13px}
+    .ok{color:#127a44}
     .err{color:#b00020}
+
+    nav.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+    nav.tabs button{
+      border:none;background:#eef8f0;color:#155b37;padding:8px 12px;border-radius:999px;
+      font-weight:800;cursor:pointer
+    }
+    .hide{display:none}
+    .center{text-align:center}
   </style>
 </head>
 <body>
-  <header>
-    <h1>ProteeMVT</h1>
-    <p>Calcula tus macros, registra comidas y sigue tu progreso día a día.</p>
-  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <span class="badge">protee mvt</span>
+    <h1>Nutrición diaria, <br> simple y accionable</h1>
+    <p>Calcula tus macros, registra lo que comes y sigue tu progreso. Diseño amable, claro y con foco en lo importante.</p>
+  </section>
 
   <div class="wrap">
-    <div class="row row-2">
-      <!-- Panel principal -->
+
+    <!-- Breve “por qué” con look editorial en tarjetas -->
+    <div class="features">
+      <div class="feat">
+        <h3>🎯 Objetivo claro</h3>
+        <p>Define tus metas y deja que la app traduzca todo a acciones simples: proteínas, calorías y hábitos.</p>
+      </div>
+      <div class="feat">
+        <h3>🍽️ Registro sin fricción</h3>
+        <p>Agrega lo que comes y consulta valores. Cada día suma para tu progreso.</p>
+      </div>
+      <div class="feat">
+        <h3>📈 Tu progreso</h3>
+        <p>Métricas que sí importan, con una vista limpia y motivadora.</p>
+      </div>
+    </div>
+
+    <!-- Zona de autenticación / dashboard -->
+    <div class="grid-2" style="margin-top:22px">
+      <!-- Panel de acceso -->
       <section class="card">
         <div id="auth-section">
           <h2>Accede a tu cuenta</h2>
-          <p class="muted">Crea tu cuenta con correo y contraseña.</p>
-          <div class="row">
+          <p class="muted">Crea tu cuenta con correo y contraseña. Luego podrás guardar tus metas y comidas.</p>
+
+          <div class="row" style="margin-top:10px">
             <div>
               <label>Correo</label>
               <input id="emailInput" type="email" placeholder="tucorreo@ejemplo.com" required />
@@ -55,81 +167,192 @@
               <input id="passInput" type="password" placeholder="Mínimo 6 caracteres" required />
             </div>
           </div>
-          <div style="margin-top:12px" class="row">
+
+          <div class="row" style="margin-top:12px">
             <button id="btnEmail" class="btn btn-primary">Ingresar / Crear cuenta</button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button id="btnResend" class="btn btn-soft" style="flex:1">Reenviar verificación</button>
+              <button id="btnForgot" class="btn btn-soft" style="flex:1">Olvidé mi contraseña</button>
+            </div>
           </div>
-          <p id="msg" class="muted"></p>
+
+          <p id="msg" class="muted" style="margin-top:10px"></p>
         </div>
-        <div class="row" style="margin-top:8px">
-  <button id="btnResend" class="btn btn-google">Reenviar verificación</button>
-  <button id="btnForgot" class="btn btn-google">Olvidé mi contraseña</button>
-</div>
 
+        <!-- Flujo de restablecimiento -->
+        <div id="recovery-section" class="hide">
+          <h2>Restablecer contraseña</h2>
+          <p class="muted">Ingresa tu nueva contraseña para continuar.</p>
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Nueva contraseña</label>
+              <input id="newPassInput" type="password" placeholder="Nueva contraseña" />
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <button id="btnSetNew" class="btn btn-primary">Guardar nueva contraseña</button>
+          </div>
+          <p id="recMsg" class="muted" style="margin-top:10px"></p>
+        </div>
 
-        <!-- Dashboard -->
+        <!-- Dashboard simple -->
         <div id="dashboard" class="hide">
           <h2>Bienvenido 👋</h2>
-          <nav>
-            <a href="#" onclick="showSection('resumen')">🏠 Resumen</a>
-            <a href="#" onclick="showSection('comidas')">🍽 Comidas</a>
-            <a href="#" onclick="showSection('progreso')">📊 Progreso</a>
+          <nav class="tabs">
+            <button onclick="showSection('resumen')">🏠 Resumen</button>
+            <button onclick="showSection('comidas')">🍽️ Comidas</button>
+            <button onclick="showSection('progreso')">📊 Progreso</button>
           </nav>
-          <div id="resumen"><p>Aquí verás tu balance de macros del día.</p></div>
-          <div id="comidas" class="hide"><p>Aquí registrarás alimentos.</p></div>
-          <div id="progreso" class="hide"><p>Aquí verás tu progreso en gráficos.</p></div>
-          <button class="btn" onclick="logout()">Cerrar sesión</button>
+          <div id="resumen"><p class="muted">Aquí verás tu progreso y tus metas del día.</p></div>
+          <div id="comidas" class="hide"><p class="muted">Próximamente: registro y búsqueda de alimentos.</p></div>
+          <div id="progreso" class="hide"><p class="muted">Próximamente: gráficos y tendencias.</p></div>
+          <div class="center" style="margin-top:14px">
+            <button class="btn" onclick="logout()">Cerrar sesión</button>
+          </div>
         </div>
       </section>
+
+      <!-- Lateral “about” corto -->
+      <aside class="card" style="align-self:start">
+        <h2>¿Qué es ProteeMVT?</h2>
+        <p class="muted" style="margin-top:6px">
+          Una calculadora y diario nutricional pensado para personas activas.
+          Entra, define tus metas y registra tus comidas sin complicaciones.
+        </p>
+        <div class="feat" style="margin-top:10px">
+          <h3>🧭 Filosofía</h3>
+          <p>Menos ruido, más enfoque en lo que suma cada día.</p>
+        </div>
+        <div class="feat" style="margin-top:10px">
+          <h3>🔒 Privacidad</h3>
+          <p>Tus datos son tuyos. Autenticación segura con Supabase.</p>
+        </div>
+      </aside>
     </div>
   </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <!-- Supabase JS v2 -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const { createClient } = supabase;
+
+    /* ======= TU PROYECTO SUPABASE ======= */
     const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njc3MDk1MSwiZXhwIjoyMDcyMzQ2OTUxfQ.VC46pebXQqwwj7wSsH9WCeiEoFuGMXYcv3yTIgsYcxU";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhmaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    /* ====== ELEMENTOS ====== */
     const emailInput = document.getElementById("emailInput");
-    const passInput = document.getElementById("passInput");
-    const msg = document.getElementById("msg");
+    const passInput  = document.getElementById("passInput");
+    const msg        = document.getElementById("msg");
 
-    // Registro / Login con email
-document.getElementById("btnEmail").onclick = async (e) => {
-  e.preventDefault();
-  msg.textContent = "";
-  const email = emailInput.value.trim();
-  const password = passInput.value.trim();
-  if (!email || !password) return msg.textContent = "Completa correo y contraseña.";
+    const recSec     = document.getElementById("recovery-section");
+    const recMsg     = document.getElementById("recMsg");
+    const newPassInput = document.getElementById("newPassInput");
 
-  // 1) Intento login
-  const login = await sb.auth.signInWithPassword({ email, password });
+    /* ====== HANDLERS ====== */
 
-  if (!login.error) {
-    msg.textContent = "Sesión iniciada ✅";
-    showDashboard();
-    return;
-  }
+    // Login / Registro
+    document.getElementById("btnEmail").onclick = async (e) => {
+      e.preventDefault();
+      msg.textContent = "";
+      const email = emailInput.value.trim();
+      const password = passInput.value.trim();
+      if (!email || !password) {
+        msg.textContent = "Completa correo y contraseña.";
+        return;
+      }
 
-  // 2) Si falla, intento registro
-  const signup = await sb.auth.signUp({ email, password });
-  if (signup.error) {
-    msg.textContent = "Error: " + signup.error.message;
-    return;
-  }
+      // 1) Intentar login
+      const login = await sb.auth.signInWithPassword({ email, password });
+      if (!login.error) {
+        msg.textContent = "Sesión iniciada ✅";
+        showDashboard();
+        return;
+      }
 
-  // Si confirmación está ON, no habrá session hasta que el usuario confirme por email
-  if (signup.data?.user && !signup.data.session) {
-    msg.textContent = "Cuenta creada. Revisa tu correo y confirma para entrar.";
-  } else {
-    msg.textContent = "Cuenta creada y sesión iniciada ✅";
-    showDashboard();
-  }
-};
+      // 2) Si falla, intentar registro
+      const signup = await sb.auth.signUp({ email, password });
+      if (signup.error) {
+        msg.textContent = "Error: " + signup.error.message;
+        return;
+      }
 
-    // Restaurar sesión tras confirmación
+      // Confirmación ON -> no hay session hasta confirmar por email
+      if (signup.data?.user && !signup.data.session) {
+        msg.textContent = "Cuenta creada. Revisa tu correo y confirma para entrar.";
+      } else {
+        msg.textContent = "Cuenta creada y sesión iniciada ✅";
+        showDashboard();
+      }
+    };
+
+    // Reenviar verificación
+    document.getElementById("btnResend").onclick = async (e) => {
+      e.preventDefault();
+      msg.textContent = "";
+      const email = emailInput.value.trim();
+      if (!email) { msg.textContent = "Escribe tu correo y pulsa Reenviar."; return; }
+      const { error } = await sb.auth.resend({ type: "signup", email });
+      msg.textContent = error ? ("No se pudo reenviar: " + error.message)
+                              : "Te reenviamos el email de verificación ✅";
+    };
+
+    // Olvidé mi contraseña
+    document.getElementById("btnForgot").onclick = async (e) => {
+      e.preventDefault();
+      msg.textContent = "";
+      const email = emailInput.value.trim();
+      if (!email) { msg.textContent = "Escribe tu correo primero."; return; }
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: "https://calculadoraproteemvt.vercel.app"
+      });
+      msg.textContent = error ? ("No se pudo enviar: " + error.message)
+                              : "Te enviamos un enlace para restablecer tu contraseña ✅";
+    };
+
+    // Guardar nueva contraseña en el flujo de recuperación
+    document.getElementById("btnSetNew").onclick = async () => {
+      recMsg.textContent = "";
+      const newPass = newPassInput.value.trim();
+      if (!newPass) { recMsg.textContent = "Escribe la nueva contraseña."; return; }
+      const { error } = await sb.auth.updateUser({ password: newPass });
+      if (error) recMsg.textContent = "Error: " + error.message;
+      else {
+        recMsg.textContent = "Contraseña actualizada ✅";
+        // Volver al login
+        recSec.classList.add("hide");
+        document.getElementById("auth-section").classList.remove("hide");
+      }
+    };
+
+    // Cerrar sesión
+    async function logout(){
+      await sb.auth.signOut();
+      document.getElementById("auth-section").classList.remove("hide");
+      document.getElementById("dashboard").classList.add("hide");
+      msg.textContent = "Sesión cerrada.";
+    }
+
+    // Mostrar secciones del dashboard
+    function showSection(sec){
+      ["resumen","comidas","progreso"].forEach(id=>{
+        document.getElementById(id).classList.toggle("hide", id!==sec);
+      });
+    }
+
+    // Mostrar dashboard si hay sesión
+    async function showDashboard(){
+      document.getElementById("auth-section").classList.add("hide");
+      document.getElementById("recovery-section").classList.add("hide");
+      document.getElementById("dashboard").classList.remove("hide");
+    }
+
+    /* ====== RESTAURAR SESIÓN / FLUJOS DE EMAIL ====== */
     (async ()=>{
       const hash = window.location.hash || "";
+
+      // Enlaces de verificación / magic link traen tokens
       if (hash.includes("access_token") && hash.includes("refresh_token")) {
         const p = new URLSearchParams(hash.substring(1));
         await sb.auth.setSession({
@@ -138,26 +361,18 @@ document.getElementById("btnEmail").onclick = async (e) => {
         });
         history.replaceState({}, document.title, window.location.pathname);
       }
+
+      // Flujo de recuperación de contraseña
+      if (hash.includes("type=recovery")) {
+        // El enlace trae una sesión temporal, mostramos form para nueva contraseña
+        document.getElementById("auth-section").classList.add("hide");
+        recSec.classList.remove("hide");
+        return;
+      }
+
       const { data: { user } } = await sb.auth.getUser();
       if (user) showDashboard();
     })();
-
-    async function showDashboard(){
-      document.getElementById("auth-section").classList.add("hide");
-      document.getElementById("dashboard").classList.remove("hide");
-    }
-
-    async function logout(){
-      await sb.auth.signOut();
-      document.getElementById("auth-section").classList.remove("hide");
-      document.getElementById("dashboard").classList.add("hide");
-    }
-
-    function showSection(sec){
-      ["resumen","comidas","progreso"].forEach(id=>{
-        document.getElementById(id).classList.toggle("hide", id!==sec);
-      });
-    }
   </script>
 </body>
 </html>
