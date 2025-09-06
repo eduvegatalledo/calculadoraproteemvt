@@ -60,6 +60,11 @@
           </div>
           <p id="msg" class="muted"></p>
         </div>
+        <div class="row" style="margin-top:8px">
+  <button id="btnResend" class="btn btn-google">Reenviar verificación</button>
+  <button id="btnForgot" class="btn btn-google">Olvidé mi contraseña</button>
+</div>
+
 
         <!-- Dashboard -->
         <div id="dashboard" class="hide">
@@ -90,28 +95,37 @@
     const msg = document.getElementById("msg");
 
     // Registro / Login con email
-    document.getElementById("btnEmail").onclick = async (e) => {
-      e.preventDefault();
-      msg.textContent = "";
-      const email = emailInput.value.trim();
-      const password = passInput.value.trim();
-      if (!email || !password) {
-        msg.textContent = "Completa correo y contraseña.";
-        return;
-      }
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) {
-        const { error: signUpError } = await sb.auth.signUp({ email, password });
-        if (signUpError) {
-          msg.textContent = "Error: " + signUpError.message;
-        } else {
-          msg.textContent = "Cuenta creada. Revisa tu correo y confirma.";
-        }
-      } else {
-        msg.textContent = "Sesión iniciada ✅";
-        showDashboard();
-      }
-    };
+document.getElementById("btnEmail").onclick = async (e) => {
+  e.preventDefault();
+  msg.textContent = "";
+  const email = emailInput.value.trim();
+  const password = passInput.value.trim();
+  if (!email || !password) return msg.textContent = "Completa correo y contraseña.";
+
+  // 1) Intento login
+  const login = await sb.auth.signInWithPassword({ email, password });
+
+  if (!login.error) {
+    msg.textContent = "Sesión iniciada ✅";
+    showDashboard();
+    return;
+  }
+
+  // 2) Si falla, intento registro
+  const signup = await sb.auth.signUp({ email, password });
+  if (signup.error) {
+    msg.textContent = "Error: " + signup.error.message;
+    return;
+  }
+
+  // Si confirmación está ON, no habrá session hasta que el usuario confirme por email
+  if (signup.data?.user && !signup.data.session) {
+    msg.textContent = "Cuenta creada. Revisa tu correo y confirma para entrar.";
+  } else {
+    msg.textContent = "Cuenta creada y sesión iniciada ✅";
+    showDashboard();
+  }
+};
 
     // Restaurar sesión tras confirmación
     (async ()=>{
