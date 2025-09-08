@@ -2,10 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ProteeMVT — Nutrición simple, progreso real</title>
+  <meta name="description" content="ProteeMVT: calcula tus macros, registra comidas y sigue tu progreso con una interfaz simple y motivadora." />
   <meta name="color-scheme" content="light" />
   <meta name="theme-color" content="#ffffff" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="ProteeMVT — Nutrición simple, progreso real" />
+  <meta property="og:description" content="Calcula tus macros, registra lo que comes y sigue tu avance cada día." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-preview.png" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Tipografías: equilibradas, legibles y modernas -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
@@ -39,9 +48,8 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
-    @media (prefers-reduced-motion:no-preference){
-      :root{ scroll-behavior:smooth; }
-    }
+    @media (prefers-reduced-motion:no-preference){ :root{ scroll-behavior:smooth; } }
+    body.modal-open{ overflow:hidden; }
 
     /* ========= Topbar ========= */
     header#topbar{
@@ -50,56 +58,37 @@
       backdrop-filter:saturate(140%) blur(8px);
       border-bottom:1px solid var(--line);
     }
-    .tb{
-      max-width:1080px;margin:0 auto;padding:10px 16px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
+    .tb{ max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px; }
     .brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--brand-2)}
     .brand-dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(180deg,var(--brand),var(--accent))}
     .tb-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .badge-email{color:var(--muted);font-size:13px}
 
     /* ========= Buttons & Inputs ========= */
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      padding:10px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#fff;color:var(--ink);font-weight:700;cursor:pointer;
-      transition:transform .06s ease, box-shadow .18s ease, filter .18s ease;
-    }
+    .btn{ display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;cursor:pointer;transition:transform .06s ease, box-shadow .18s ease, filter .18s ease; }
     .btn:active{ transform:translateY(1px) }
+    .btn[disabled]{ opacity:.6; cursor:not-allowed }
     .btn-primary{ border-color:transparent;background:var(--brand);color:#fff; }
     .btn-primary:hover{ filter:brightness(.98) }
     .btn-soft{ background:#f3f9f5;border-color:#dfe9e4 }
     .btn-ghost{ background:transparent;border-color:transparent }
+    .btn.is-loading{ position:relative; pointer-events:none }
+    .btn.is-loading::after{ content:""; width:18px;height:18px; border:2px solid rgba(255,255,255,.7); border-top-color:transparent; border-radius:50%; display:inline-block; animation:spin .8s linear infinite }
+    @keyframes spin{ to{ transform:rotate(360deg) } }
 
-    input{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#fff;font-size:15px;outline:none;transition:box-shadow .18s,border .18s,transform .03s;
-    }
+    label{ font-weight:700;font-size:13px; display:inline-block; margin-bottom:6px }
+    input{ width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:15px;outline:none;transition:box-shadow .18s,border .18s,transform .03s; }
     input:focus{ border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
 
     /* ========= Layout / Cards ========= */
     .wrap{ max-width:1080px; margin:0 auto; padding:0 16px 56px; }
-    .card{
-      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-      box-shadow:var(--shadow); padding:18px;
-    }
+    .card{ background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow); padding:18px; }
 
     /* ========= Hero (Guest / User) ========= */
-    .hero{
-      position:relative;overflow:hidden;color:#fff;text-align:center;
-      background: linear-gradient(90deg, var(--brand-2), var(--brand));
-    }
+    .hero{ position:relative;overflow:hidden;color:#fff;text-align:center;background: linear-gradient(90deg, var(--brand-2), var(--brand)); }
     .hero-pad{ padding: clamp(34px, 6.8vw, 84px) 16px 28px; }
-    .badge{
-      display:inline-block;padding:7px 10px;border-radius:999px;font-weight:800;
-      letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.20);font-size:12px
-    }
-    h1.display{
-      margin:14px auto 8px;line-height:1.05;font-weight:900;
-      font-size: clamp(28px, 5.2vw, 54px);
-      text-shadow:0 8px 30px rgba(0,0,0,.18)
-    }
+    .badge{ display:inline-block;padding:7px 10px;border-radius:999px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.20);font-size:12px }
+    h1.display{ margin:14px auto 8px;line-height:1.05;font-weight:900;font-size: clamp(28px, 5.2vw, 54px);text-shadow:0 8px 30px rgba(0,0,0,.18) }
     .lead{ margin:8px auto 0; max-width:860px; font-size: clamp(14px, 2.4vw, 18px); opacity:.95 }
 
     /* ========= Feature blocks ========= */
@@ -118,10 +107,7 @@
     .center{ text-align:center }
 
     nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
-    nav.tabs button{
-      border:none; background:#eef7f1; color:#175c3a; padding:8px 12px; border-radius:999px;
-      font-weight:800; cursor:pointer
-    }
+    nav.tabs button{ border:none; background:#eef7f1; color:#175c3a; padding:8px 12px; border-radius:999px; font-weight:800; cursor:pointer }
 
     /* ========= Modal ========= */
     #profileModal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(16,32,25,.25); padding:16px; z-index:50 }
@@ -130,152 +116,160 @@
       @keyframes pop{ from{transform:translateY(8px) scale(.98); opacity:0} to{transform:none; opacity:1} }
     }
 
+    .modal-card{ max-width:460px;width:100%;position:relative }
+
     /* ========= Footer / helper spacing ========= */
     .sp16{ height:16px } .sp24{ height:24px }
+    .visually-hidden{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px, 1px, 1px, 1px); white-space:nowrap; }
+    .stack-10{ display:grid; gap:10px }
+    .stack-12{ display:grid; gap:12px }
+    .row{ display:flex; gap:10px; flex-wrap:wrap }
   </style>
 </head>
 <body>
 
   <!-- ===== Topbar (solo usuarios) ===== -->
-  <header id="topbar" class="hide">
+  <header id="topbar" class="hide" role="banner">
     <div class="tb">
-      <div class="brand"><span class="brand-dot"></span> ProteeMVT</div>
+      <div class="brand" aria-label="ProteeMVT"><span class="brand-dot" aria-hidden="true"></span> ProteeMVT</div>
       <div class="tb-actions">
-        <span id="userBadge" class="badge-email"></span>
-        <button id="btnProfile" class="btn btn-soft" style="padding:8px 12px">Tu perfil</button>
-        <button id="btnHeaderLogout" class="btn">Salir</button>
+        <span id="userBadge" class="badge-email" aria-live="polite"></span>
+        <button id="btnProfile" class="btn btn-soft" type="button" aria-haspopup="dialog" aria-controls="profileModal">Tu perfil</button>
+        <button id="btnHeaderLogout" class="btn" type="button">Salir</button>
       </div>
     </div>
   </header>
 
   <!-- ===== Hero Invitado ===== -->
-  <section id="hero-guest" class="hero">
+  <section id="hero-guest" class="hero" aria-labelledby="heroGuestTitle">
     <div class="hero-pad">
       <span class="badge">protee mvt</span>
-      <h1 class="display">Nutrición simple, progreso real</h1>
+      <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
       <p class="lead">Calcula tus macros, registra lo que comes y sigue tu avance. Interfaz clara, amable y enfocada en ayudarte todos los días.</p>
     </div>
   </section>
 
   <!-- ===== Hero Usuario ===== -->
-  <section id="hero-user" class="hero hide" style="background:linear-gradient(90deg,var(--brand-2),#1a6a42)">
+  <section id="hero-user" class="hero hide" style="background:linear-gradient(90deg,var(--brand-2),#1a6a42)" aria-labelledby="heroUserTitle">
     <div class="hero-pad">
       <span class="badge">tu día, optimizado</span>
-      <h1 id="helloName" class="display">¡Bienvenido!</h1>
+      <h1 id="heroUserTitle" class="display"><span id="helloName">¡Bienvenido!</span></h1>
       <p class="lead">Revisa tu resumen, registra comidas y mira tus tendencias.</p>
     </div>
   </section>
 
-  <div class="wrap">
+  <main class="wrap" id="main">
 
     <!-- Bloques de valor -->
-    <div class="features">
-      <div class="feat"><h3>🎯 Objetivo claro</h3><p>Define tus metas y deja que la app traduzca todo a acciones simples: proteínas, calorías y hábitos.</p></div>
-      <div class="feat"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes y consulta valores. Cada día suma para tu progreso.</p></div>
-      <div class="feat"><h3>📈 Tu progreso</h3><p>Métricas que sí importan, con una vista limpia y motivadora.</p></div>
-    </div>
+    <section class="features" aria-label="Beneficios principales">
+      <article class="feat"><h3>🎯 Objetivo claro</h3><p>Define tus metas y deja que la app traduzca todo a acciones simples: proteínas, calorías y hábitos.</p></article>
+      <article class="feat"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes y consulta valores. Cada día suma para tu progreso.</p></article>
+      <article class="feat"><h3>📈 Tu progreso</h3><p>Métricas que sí importan, con una vista limpia y motivadora.</p></article>
+    </section>
 
-    <div class="sp16"></div>
+    <div class="sp16" aria-hidden="true"></div>
 
     <!-- Auth + About -->
-    <div class="grid-2">
+    <section class="grid-2" aria-label="Acceso y descripción">
       <!-- Auth / Dashboard -->
-      <section class="card">
+      <section class="card" aria-labelledby="authTitle">
 
         <!-- INVITADO: formulario -->
-        <div id="auth-section">
-          <h2>Accede a tu cuenta</h2>
+        <div id="auth-section" class="stack-12">
+          <h2 id="authTitle">Accede a tu cuenta</h2>
           <p class="muted">Crea tu cuenta con correo y contraseña. Luego podrás guardar tus metas y comidas.</p>
 
-          <div style="display:grid;gap:12px;margin-top:10px">
+          <div class="stack-12" style="margin-top:10px">
             <div>
-              <label style="font-weight:700;font-size:13px">Correo</label>
+              <label for="emailInput">Correo</label>
               <input id="emailInput" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
             </div>
             <div>
-              <label style="font-weight:700;font-size:13px">Contraseña</label>
+              <label for="passInput">Contraseña</label>
               <input id="passInput" type="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
             </div>
           </div>
 
-          <div style="display:grid;gap:10px;margin-top:12px">
-            <button id="btnEmail" class="btn btn-primary">Ingresar / Crear cuenta</button>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button id="btnResend" class="btn btn-soft" style="flex:1">Reenviar verificación</button>
-              <button id="btnForgot" class="btn btn-soft" style="flex:1">Olvidé mi contraseña</button>
+          <div class="stack-10" style="margin-top:12px">
+            <button id="btnEmail" class="btn btn-primary" type="button">Ingresar / Crear cuenta</button>
+            <div class="row">
+              <button id="btnResend" class="btn btn-soft" type="button" style="flex:1">Reenviar verificación</button>
+              <button id="btnForgot" class="btn btn-soft" type="button" style="flex:1">Olvidé mi contraseña</button>
             </div>
           </div>
 
-          <p id="msg" class="muted" style="margin-top:10px"></p>
+          <p id="msg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
         </div>
 
         <!-- RECOVERY: nueva contraseña -->
-        <div id="recovery-section" class="hide">
-          <h2>Restablecer contraseña</h2>
+        <div id="recovery-section" class="hide stack-12" aria-labelledby="recTitle">
+          <h2 id="recTitle">Restablecer contraseña</h2>
           <p class="muted">Ingresa tu nueva contraseña para continuar.</p>
-          <div style="display:grid;gap:12px;margin-top:8px">
+          <div class="stack-12" style="margin-top:8px">
             <div>
-              <label style="font-weight:700;font-size:13px">Nueva contraseña</label>
+              <label for="newPassInput">Nueva contraseña</label>
               <input id="newPassInput" type="password" placeholder="Nueva contraseña" autocomplete="new-password" />
             </div>
           </div>
-          <div class="sp16"></div>
-          <button id="btnSetNew" class="btn btn-primary" style="width:auto">Guardar nueva contraseña</button>
-          <p id="recMsg" class="muted" style="margin-top:10px"></p>
+          <div class="sp16" aria-hidden="true"></div>
+          <button id="btnSetNew" class="btn btn-primary" type="button" style="width:auto">Guardar nueva contraseña</button>
+          <p id="recMsg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
         </div>
 
         <!-- USUARIO: dashboard -->
-        <div id="dashboard" class="hide">
+        <div id="dashboard" class="hide" aria-label="Panel de usuario">
           <h2>Bienvenido 👋</h2>
-          <nav class="tabs">
-            <button onclick="showSection('resumen')">🏠 Resumen</button>
-            <button onclick="showSection('comidas')">🍽️ Comidas</button>
-            <button onclick="showSection('progreso')">📊 Progreso</button>
+          <nav class="tabs" aria-label="Secciones del panel">
+            <button type="button" onclick="showSection('resumen')">🏠 Resumen</button>
+            <button type="button" onclick="showSection('comidas')">🍽️ Comidas</button>
+            <button type="button" onclick="showSection('progreso')">📊 Progreso</button>
           </nav>
           <div id="resumen"><p class="muted">Aquí verás tu progreso y tus metas del día.</p></div>
           <div id="comidas" class="hide"><p class="muted">Próximamente: registro y búsqueda de alimentos.</p></div>
           <div id="progreso" class="hide"><p class="muted">Próximamente: gráficos y tendencias.</p></div>
           <div class="center" style="margin-top:14px">
-            <button class="btn" onclick="logout()">Cerrar sesión</button>
+            <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
           </div>
         </div>
 
       </section>
 
       <!-- Lateral información -->
-      <aside class="card" style="align-self:start">
-        <h2>¿Qué es ProteeMVT?</h2>
-        <p class="muted" style="margin-top:6px">
-          Una calculadora y diario nutricional para personas activas. Interfaz amable, métricas claras y sin fricción.
-        </p>
+      <aside class="card" style="align-self:start" aria-labelledby="aboutTitle">
+        <h2 id="aboutTitle">¿Qué es ProteeMVT?</h2>
+        <p class="muted" style="margin-top:6px">Una calculadora y diario nutricional para personas activas. Interfaz amable, métricas claras y sin fricción.</p>
         <div class="feat" style="margin-top:10px"><h3>🧭 Filosofía</h3><p>Menos ruido, más foco en lo que suma cada día.</p></div>
         <div class="feat" style="margin-top:10px"><h3>🔒 Privacidad</h3><p>Tus datos son tuyos. Autenticación segura con Supabase.</p></div>
       </aside>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <!-- ===== Modal de Perfil ===== -->
-  <div id="profileModal" class="hide">
-    <div class="card" style="max-width:460px;width:100%;position:relative">
-      <h2>Tu perfil</h2>
+  <div id="profileModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="card modal-card">
+      <h2 id="profileTitle">Tu perfil</h2>
       <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
-      <div style="display:grid;gap:12px;margin-top:10px">
+      <div class="stack-12" style="margin-top:10px">
         <div>
-          <label style="font-weight:700;font-size:13px">Correo</label>
+          <label for="profEmail">Correo</label>
           <input id="profEmail" type="email" disabled />
         </div>
         <div>
-          <label style="font-weight:700;font-size:13px">Nombre visible</label>
+          <label for="profName">Nombre visible</label>
           <input id="profName" type="text" placeholder="Tu nombre" />
         </div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-        <button id="btnCloseProfile" class="btn">Cerrar</button>
-        <button id="btnSaveProfile" class="btn btn-primary" style="width:auto">Guardar</button>
+      <div class="row" style="margin-top:12px;justify-content:flex-end">
+        <button id="btnCloseProfile" class="btn" type="button">Cerrar</button>
+        <button id="btnSaveProfile" class="btn btn-primary" type="button" style="width:auto">Guardar</button>
       </div>
-      <p id="profMsg" class="muted" style="margin-top:8px"></p>
+      <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
     </div>
   </div>
+
+  <footer class="wrap" aria-label="Información legal">
+    <p class="muted">© <span id="year"></span> ProteeMVT. Todos los derechos reservados.</p>
+  </footer>
 
   <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -288,30 +282,40 @@
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     /* ====== Helpers UI ====== */
-    const el = (id)=>document.getElementById(id);
-    const show = (id)=>el(id).classList.remove('hide');
-    const hide = (id)=>el(id).classList.add('hide');
+    const $ = (id)=>document.getElementById(id);
+    const show = (id)=>$(id).classList.remove('hide');
+    const hide = (id)=>$(id).classList.add('hide');
 
-    function showSection(sec){
-      ["resumen","comidas","progreso"].forEach(id=>{
-        el(id).classList.toggle("hide", id!==sec);
-      });
+    function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>{ $(id).classList.toggle("hide", id!==sec); }); }
+
+    // Botón loading helper
+    function setLoading(btn, loading){
+      if(!btn) return;
+      if(loading){ btn.classList.add('is-loading'); btn.setAttribute('disabled','true'); }
+      else{ btn.classList.remove('is-loading'); btn.removeAttribute('disabled'); }
     }
 
     /* ====== Auth Elements ====== */
-    const emailInput = el("emailInput");
-    const passInput  = el("passInput");
-    const msg        = el("msg");
+    const emailInput = $("emailInput");
+    const passInput  = $("passInput");
+    const msg        = $("msg");
 
-    const recSec     = el("recovery-section");
-    const recMsg     = el("recMsg");
-    const newPassInput = el("newPassInput");
+    const recSec     = $("recovery-section");
+    const recMsg     = $("recMsg");
+    const newPassInput = $("newPassInput");
 
     /* ====== Perfil Elements ====== */
-    const modal = el("profileModal");
-    const profEmail = el("profEmail");
-    const profName  = el("profName");
-    const profMsg   = el("profMsg");
+    const modal = $("profileModal");
+    const profEmail = $("profEmail");
+    const profName  = $("profName");
+    const profMsg   = $("profMsg");
+
+    const btnEmail = $("btnEmail");
+    const btnResend = $("btnResend");
+    const btnForgot = $("btnForgot");
+    const btnSetNew = $("btnSetNew");
+    const btnSaveProfile = $("btnSaveProfile");
+    const btnCloseProfile = $("btnCloseProfile");
 
     /* ====== API Perfil ====== */
     async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
@@ -337,8 +341,8 @@
       hide("auth-section"); hide("recovery-section"); show("dashboard");
 
       const name = (profile?.display_name || user.email || '').split('@')[0];
-      el("helloName").textContent = `¡Hola, ${name}!`;
-      el("userBadge").textContent = user.email;
+      $("helloName").textContent = `¡Hola, ${name}!`;
+      $("userBadge").textContent = user.email;
     }
     function setGuestUI(){
       hide("topbar"); show("hero-guest"); hide("hero-user");
@@ -352,18 +356,19 @@
     }
 
     /* ====== Auth Actions ====== */
-    el("btnEmail").onclick = async (e)=>{
-      e.preventDefault(); msg.textContent="";
+    btnEmail.onclick = async (e)=>{
+      e.preventDefault(); msg.textContent=""; setLoading(btnEmail, true);
       const email = (emailInput.value||"").trim();
       const password = (passInput.value||"").trim();
-      if(!email || !password){ msg.textContent="Completa correo y contraseña."; return; }
+      if(!email || !password){ msg.textContent="Completa correo y contraseña."; setLoading(btnEmail,false); return; }
 
       // Intentar login
       const login = await sb.auth.signInWithPassword({ email, password });
-      if(!login.error){ msg.textContent="Sesión iniciada ✅"; await afterLoginShowApp(); return; }
+      if(!login.error){ msg.textContent="Sesión iniciada ✅"; setLoading(btnEmail,false); await afterLoginShowApp(); return; }
 
       // Si no existe, registrar
       const signup = await sb.auth.signUp({ email, password });
+      setLoading(btnEmail,false);
       if(signup.error){ msg.textContent="Error: "+signup.error.message; return; }
 
       if(signup.data?.user && !signup.data.session){
@@ -374,62 +379,73 @@
       }
     };
 
-    el("btnResend").onclick = async (e)=>{
-      e.preventDefault(); msg.textContent="";
+    btnResend.onclick = async (e)=>{
+      e.preventDefault(); msg.textContent=""; setLoading(btnResend,true);
       const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo y pulsa Reenviar."; return; }
+      if(!email){ msg.textContent="Escribe tu correo y pulsa Reenviar."; setLoading(btnResend,false); return; }
       const { error } = await sb.auth.resend({ type:"signup", email });
+      setLoading(btnResend,false);
       msg.textContent = error ? ("No se pudo reenviar: "+error.message) : "Te reenviamos el email de verificación ✅";
     };
 
-    el("btnForgot").onclick = async (e)=>{
-      e.preventDefault(); msg.textContent="";
+    btnForgot.onclick = async (e)=>{
+      e.preventDefault(); msg.textContent=""; setLoading(btnForgot,true);
       const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo primero."; return; }
+      if(!email){ msg.textContent="Escribe tu correo primero."; setLoading(btnForgot,false); return; }
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+      setLoading(btnForgot,false);
       msg.textContent = error ? ("No se pudo enviar: "+error.message) : "Te enviamos un enlace para restablecer tu contraseña ✅";
     };
 
-    async function logout(){
-      await sb.auth.signOut();
-      setGuestUI();
-    }
-    el("btnHeaderLogout").onclick = logout;
+    async function logout(){ await sb.auth.signOut(); setGuestUI(); }
+    $("btnHeaderLogout").onclick = logout;
 
-    /* ====== Perfil Modal ====== */
+    /* ====== Modal helpers (accesibilidad) ====== */
+    let lastFocused = null;
     function openProfileModal(profile, user){
+      lastFocused = document.activeElement;
       profEmail.value = user.email || "";
       profName.value  = profile?.display_name || "";
       profMsg.textContent = "";
       modal.classList.remove("hide");
+      document.body.classList.add('modal-open');
+      // Enfocar al primer campo
+      setTimeout(()=>profName.focus(), 0);
     }
-    function closeProfileModal(){ modal.classList.add("hide"); }
-    el("btnProfile").onclick = async ()=>{
-      const user = await getUser(); if(!user) return;
-      const profile = await getProfile(user.id);
-      openProfileModal(profile, user);
-    };
-    el("btnCloseProfile").onclick = closeProfileModal;
-    el("btnSaveProfile").onclick = async ()=>{
-      profMsg.textContent="";
-      const user = await getUser(); if(!user) return;
+    function closeProfileModal(){
+      modal.classList.add("hide");
+      document.body.classList.remove('modal-open');
+      if(lastFocused) lastFocused.focus();
+    }
+    $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); openProfileModal(profile, user); };
+    btnCloseProfile.onclick = closeProfileModal;
+
+    // Guardar perfil
+    btnSaveProfile.onclick = async ()=>{
+      profMsg.textContent=""; setLoading(btnSaveProfile,true);
+      const user = await getUser(); if(!user){ setLoading(btnSaveProfile,false); return; }
       const display_name = (profName.value||"").trim() || user.email;
       const { error } = await sb.from('profiles').upsert({ id:user.id, display_name });
+      setLoading(btnSaveProfile,false);
       if(error){ profMsg.textContent="Error: "+error.message; return; }
       profMsg.textContent="Guardado ✅";
-      el("helloName").textContent = `¡Hola, ${(display_name||'').split('@')[0]}!`;
+      $("helloName").textContent = `¡Hola, ${(display_name||'').split('@')[0]}!`;
       setTimeout(closeProfileModal, 650);
     };
 
+    // Accesibilidad: cerrar con ESC y clic fuera
+    window.addEventListener('keydown', (e)=>{ if(!modal.classList.contains('hide') && e.key === 'Escape'){ closeProfileModal(); } });
+    modal.addEventListener('click', (e)=>{ if(e.target === modal){ closeProfileModal(); } });
+
     /* ====== Restaurar sesión desde enlaces de email ====== */
     (async ()=>{
+      // Año del footer
+      $("year").textContent = new Date().getFullYear();
+
       const hash = window.location.hash || "";
       if(hash.includes("access_token") && hash.includes("refresh_token")){
         const p = new URLSearchParams(hash.substring(1));
-        await sb.auth.setSession({
-          access_token: p.get("access_token"),
-          refresh_token: p.get("refresh_token")
-        });
+        await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
         history.replaceState({}, document.title, window.location.pathname);
       }
       if(hash.includes("type=recovery")){
