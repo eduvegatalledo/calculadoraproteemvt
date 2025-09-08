@@ -1,109 +1,111 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ProteeMVT — Nutrición simple, progreso real</title>
-  <meta name="description" content="ProteeMVT: calcula tus macros, registra lo que comes y mide tu avance." />
+  <title>ProteeMVT — Calculadora & Registro de Macros</title>
+  <meta name="description" content="Calcula tus macros, guarda tus metas y registra tus comidas con una experiencia rápida, accesible y confiable." />
   <meta name="color-scheme" content="light" />
-  <meta name="theme-color" content="#12d59a" />
+  <meta name="theme-color" content="#10b981" />
 
   <!-- Social -->
-  <meta property="og:title" content="ProteeMVT — Nutrición simple, progreso real" />
-  <meta property="og:description" content="Calcula tus macros, registra lo que comes y mide tu avance." />
+  <meta property="og:title" content="ProteeMVT — Calculadora & Registro de Macros" />
+  <meta property="og:description" content="Calcula tus macros, guarda tus metas y registra tus comidas con una experiencia rápida, accesible y confiable." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/og-preview.png" />
   <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Tipografías redondeadas -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Rubik+Rounded:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <!-- Tipografías elegibles de amplio soporte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root{
-      --emerald:#10b981;   /* primario */
-      --aqua:#32e6ff;      /* acento */
-      --ink:#0b1a20;       /* texto principal */
-      --ink-2:#355059;     /* texto secundario */
-      --paper:#f8fffb;     /* fondo uniforme */
-      --glass:#ffffff;     /* superficies */
-      --stroke: rgba(12,130,94,.14);
-      --ring: rgba(18,213,154,.22);
+      --emerald:#10b981; --emerald-2:#0ea77a; --ink:#0b1a20; --ink-2:#355059;
+      --paper:#f8fffb; --glass:#ffffff; --stroke: rgba(12,130,94,.14); --ring: rgba(16,185,129,.24);
       --shadow: 0 14px 34px rgba(5,28,22,.08), 0 4px 14px rgba(5,28,22,.06);
       --radius-xl: 22px; --radius:16px; --radius-sm:12px;
+      --danger:#d14343; --warning:#b27a00; --muted:#4b6b64;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
+    *,*::before,*::after{ box-sizing:border-box }
+    html,body{ margin:0; padding:0 }
     body{
-      font-family:'Rubik Rounded','Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
-      color:var(--ink);
-      background: var(--paper);
-      min-height:100dvh;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+      color:var(--ink); background:var(--paper); min-height:100dvh;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 20px 72px }
 
-    .wrap{ max-width:1200px; margin:0 auto; padding:0 20px 72px; }
+    /* Utilidades */
+    .hide{ display:none !important }
+    .row{ display:flex; gap:10px; flex-wrap:wrap }
+    .stack-8{ display:grid; gap:8px } .stack-10{ display:grid; gap:10px } .stack-12{ display:grid; gap:12px } .stack-16{ display:grid; gap:16px }
+    .muted{ color:var(--muted); font-size:13px }
+    .center{ text-align:center }
+    .right{ text-align:right }
+    .w-50{ width:50% } .w-33{ width:33% } .w-25{ width:25% } .w-100{ width:100% }
 
-    /* Topbar (solo cuando hay sesión) */
-    header#topbar{ position:sticky; top:0; z-index:30; }
-    .tb{ max-width:1200px; margin:10px auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--glass); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow); }
-    .tb-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    /* Componentes base */
+    .card{ position:relative; background:var(--glass); border:1px solid var(--stroke); border-radius:var(--radius-xl); box-shadow:var(--shadow); padding:18px }
+    label{ font-weight:600; font-size:13px; display:inline-block; margin-bottom:6px; letter-spacing:.2px }
+    input, select{ width:100%; padding:14px 14px; border-radius:14px; border:1px solid #e5efea; background:#fff; font-size:16px; outline:none; transition:box-shadow .18s,border .18s,transform .03s }
+    input:focus, select:focus{ border-color:var(--emerald); box-shadow:0 0 0 4px var(--ring) }
+    input[type="number"]{ -moz-appearance:textfield }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0 }
+    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:999px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease }
+    .btn:active{ transform:translateY(1px) }
+    .btn[disabled]{ opacity:.6; cursor:not-allowed }
+    .btn-primary{ background:linear-gradient(135deg,#16d39f,#0fb787); color:#04241b; border-color:transparent; box-shadow: 0 12px 26px rgba(16,185,129,.26), inset 0 -2px 0 rgba(0,0,0,.06) }
+    .btn-soft{ background:#f3fbf8; border-color:#e3f3ed }
+    .pill{ display:inline-flex; align-items:center; gap:8px; background:#ecfbf6; color:#0b4d3f; padding:8px 12px; border-radius:999px; border:1px solid #d8efe8; font-weight:700; font-size:13px }
+
+    /* Topbar */
+    header#topbar{ position:sticky; top:0; z-index:30 }
+    .tb{ max-width:1200px; margin:10px auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--glass); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow) }
     .badge-email{color:#1c3b33;font-size:13px; opacity:.85}
 
-    /* Botones & Inputs */
-    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:999px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease; }
-    .btn:active{ transform:translateY(1px) }
-    .btn-primary{ background:linear-gradient(135deg,#16d39f,#0fb787); color:#04241b; border-color:transparent; box-shadow: 0 12px 26px rgba(16,185,129,.26), inset 0 -2px 0 rgba(0,0,0,.06); }
-    .btn-primary:hover{ filter:brightness(1.03) }
-    .btn-soft{ background:#f3fbf8; border-color:#e3f3ed }
-    .btn[disabled]{ opacity:.6; cursor:not-allowed }
-
-    label{ font-weight:700; font-size:13px; display:inline-block; margin-bottom:6px; letter-spacing:.2px }
-    input{ width:100%; padding:15px 16px; border-radius:16px; border:1px solid #e5efea; background:#fff; font-size:16px; outline:none; transition:box-shadow .18s,border .18s,transform .03s; }
-    input:focus{ border-color:var(--emerald); box-shadow:0 0 0 4px var(--ring); }
-
-    /* Hero reorganizado: título a la izquierda, acceso a la derecha */
-    .hero{ position:relative; color:#0a2a22; }
-    .hero-pad{ padding: clamp(30px, 6vw, 60px) 20px; }
+    /* Hero */
+    .hero{ position:relative; color:#0a2a22 }
+    .hero-pad{ padding: clamp(28px, 6vw, 56px) 20px }
     .hero-grid{ display:grid; grid-template-columns:1fr; gap:20px }
     @media (min-width:980px){ .hero-grid{ grid-template-columns:1.2fr .8fr } }
+    .display{ margin:8px 0 6px; line-height:1.02; font-weight:800; font-family:'Poppins','Inter',sans-serif; font-size: clamp(38px, 7vw, 72px); color:#0c3e33; letter-spacing:.1px }
+    .lead{ margin:10px 0 0; max-width:820px; font-size: clamp(16px, 2.2vw, 19px); color:#2f5b52; opacity:.98 }
 
-    .display{ margin:8px 0 6px; line-height:1.02; font-weight:800; font-family:'Poppins','Rubik Rounded',sans-serif; font-size: clamp(38px, 7vw, 76px); color:#0c3e33; letter-spacing:.1px }
-    .lead{ margin:10px 0 0; max-width:820px; font-size: clamp(16px, 2.2vw, 20px); color:#2f5b52; opacity:.98 }
-    .subbrand{ margin:6px 0 2px; font-family:'Poppins','Rubik Rounded',sans-serif; color:#1c433a; opacity:.9 }
+    /* Tabs */
+    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 18px }
+    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 16px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8; font-family:'Poppins','Inter',sans-serif }
+    nav.tabs button[aria-current="page"]{ background:#0fb787; color:#04241b }
 
-    /* Card genérico */
-    .card{ position:relative; background:var(--glass); border:1px solid var(--stroke); border-radius:var(--radius-xl); box-shadow:var(--shadow); padding:20px; }
+    /* Grids */
+    .grid-2{ display:grid; gap:16px; grid-template-columns:1fr }
+    .grid-3{ display:grid; gap:16px; grid-template-columns:1fr }
+    @media (min-width:880px){ .grid-2{ grid-template-columns:1fr 1fr } .grid-3{ grid-template-columns:repeat(3,1fr) } }
 
-    /* Acceso pulcro: sólo dos botones */
-    .access-card h2{ margin:0 0 10px; font-size:22px; color:#0e3e34 }
-    .access-card .muted{ color:#40675e; font-size:13px; margin:0 0 10px }
+    /* Listas y tablas */
+    table{ width:100%; border-collapse:separate; border-spacing:0; background:#fff; border:1px solid #e6f1ec; border-radius:16px; overflow:hidden }
+    th, td{ padding:12px 10px; text-align:left; border-bottom:1px solid #eef6f2 }
+    th{ background:#f6fdfa; font-size:13px; color:#0a372d; letter-spacing:.2px }
+    tr:last-child td{ border-bottom:none }
 
-    /* Tabs / dashboard */
-    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
-    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 16px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8; font-family:'Poppins','Rubik Rounded',sans-serif }
+    /* Barras de progreso */
+    .bar{ height:12px; border-radius:999px; background:#e9f6f0; overflow:hidden }
+    .bar > span{ display:block; height:100%; width:0; background:linear-gradient(90deg,#10b981,#0ea77a) }
 
-    .grid-3{ display:grid; gap:18px; grid-template-columns:1fr }
-    @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr) } }
-    .feat-card{ background:#ffffff; border:1px solid #e6f1ec; border-radius:18px; padding:18px; box-shadow:var(--shadow) }
-    .feat-card h3{ margin:0 0 8px; font-size:18px; color:#0a372d; font-family:'Poppins','Rubik Rounded',sans-serif }
-    .feat-card p{ margin:0; color:#335a52; font-size:14px }
+    /* Toaster */
+    .toast{ position:fixed; bottom:22px; right:22px; background:#05261f; color:#d9fff4; padding:12px 14px; border-radius:14px; box-shadow:var(--shadow); opacity:0; transform:translateY(8px); pointer-events:none; transition:.25s ease }
+    .toast.show{ opacity:1; transform:translateY(0); pointer-events:auto }
 
-    .hide{ display:none !important }
-    .muted{ color:#40675e; font-size:13px }
-    .center{ text-align:center }
-    .stack-10{ display:grid; gap:10px }
-    .stack-12{ display:grid; gap:12px }
-    .row{ display:flex; gap:10px; flex-wrap:wrap }
+    /* Modales */
+    .modal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22) }
   </style>
 </head>
 <body>
-
-  <!-- Topbar (visible al iniciar sesión) -->
+  <!-- Topbar (sesión) -->
   <header id="topbar" class="hide" role="banner">
-    <div class="tb">
-      <div class="brand" aria-label="ProteeMVT" style="display:none"></div>
-      <div class="tb-actions">
+    <div class="tb" aria-label="Barra superior">
+      <div class="pill" aria-hidden="true">ProteeMVT</div>
+      <div class="row" style="align-items:center">
         <span id="userBadge" class="badge-email" aria-live="polite"></span>
         <button id="btnProfile" class="btn btn-soft" type="button" aria-haspopup="dialog" aria-controls="profileModal">Tu perfil</button>
         <button id="btnHeaderLogout" class="btn" type="button">Salir</button>
@@ -115,19 +117,15 @@
   <section id="hero-guest" class="hero" aria-labelledby="heroGuestTitle">
     <div class="wrap hero-pad">
       <div class="hero-grid">
-        <!-- Columna izquierda: título -->
         <div>
           <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
-          <p class="subbrand">ProteeMVT</p>
-          <p class="lead">Calcula tus macros, registra lo que comes y mide tu avance.</p>
+          <p class="lead">Calcula tus macros, guarda tus metas diarias y registra tus comidas sin fricción.</p>
         </div>
-
-        <!-- Columna derecha: acceso -->
-        <aside class="card access-card" aria-labelledby="accessTitle">
-          <h2 id="accessTitle">Acceso</h2>
-          <p class="muted">Elige una opción para continuar.</p>
+        <aside class="card" aria-labelledby="accessTitle">
+          <h2 id="accessTitle" style="margin:0 0 10px;font-size:22px;color:#0e3e34">Acceso</h2>
+          <p class="muted" style="margin:0 0 10px">Elige una opción para continuar.</p>
           <div class="stack-10">
-            <button id="btnOpenSignup" class="btn btn-primary" type="button">Regístrate aquí</button>
+            <button id="btnOpenSignup" class="btn btn-primary" type="button">Regístrate</button>
             <button id="btnOpenLogin" class="btn btn-soft" type="button">Iniciar sesión</button>
           </div>
         </aside>
@@ -135,44 +133,255 @@
     </div>
   </section>
 
-  <!-- DASHBOARD (se muestra después de iniciar sesión) -->
+  <!-- APP -->
   <main class="wrap" id="main">
     <section id="dashboard" class="hide" aria-label="Panel de usuario" style="margin-top:6px">
-      <h2>Bienvenido 👋</h2>
+      <h2>Bienvenido</h2>
       <nav class="tabs" aria-label="Secciones del panel">
-        <button type="button" onclick="showSection('resumen')">🏠 Resumen</button>
-        <button type="button" onclick="showSection('comidas')">🍽️ Comidas</button>
-        <button type="button" onclick="showSection('progreso')">📊 Progreso</button>
+        <button data-tab="resumen" aria-current="page">Resumen</button>
+        <button data-tab="calculadora">Calculadora de macros</button>
+        <button data-tab="comidas">Comidas</button>
+        <button data-tab="progreso">Progreso</button>
       </nav>
-      <div id="resumen"><p class="muted">Aquí verás tu progreso y tus metas del día.</p></div>
-      <div id="comidas" class="hide"><p class="muted">Próximamente: registro y búsqueda de alimentos.</p></div>
-      <div id="progreso" class="hide"><p class="muted">Próximamente: gráficos y tendencias.</p></div>
-      <div class="center" style="margin-top:14px">
-        <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
-      </div>
-    </section>
 
-    <!-- Beneficios al final (opcional, puedes quitar si no los quieres) -->
-    <section id="beneficios-final" class="grid-3" aria-label="Beneficios principales" style="margin-top:28px">
-      <article class="feat-card"><h3>🎯 Objetivo claro</h3><p>Define metas y la app traduce a acciones simples: proteínas, calorías y hábitos.</p></article>
-      <article class="feat-card"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes en segundos y consulta valores clave sin perder el foco.</p></article>
-      <article class="feat-card"><h3>📈 Progreso motivador</h3><p>Gráficos limpios con métricas que importan para sostener el hábito.</p></article>
+      <!-- RESUMEN -->
+      <section id="resumen" class="stack-12">
+        <div class="grid-3">
+          <div class="card stack-12">
+            <h3 style="margin:0">Metas de hoy</h3>
+            <div class="stack-8">
+              <div>
+                <div class="row" style="justify-content:space-between"><strong>Calorías</strong><span id="sumCalGoal">—</span></div>
+                <div class="bar" aria-hidden="true"><span id="barCal"></span></div>
+                <div class="row" style="justify-content:space-between" aria-live="polite"><small class="muted">Consumidas</small><small id="sumCalIn">0</small></div>
+              </div>
+              <div>
+                <div class="row" style="justify-content:space-between"><strong>Proteínas (g)</strong><span id="sumProtGoal">—</span></div>
+                <div class="bar"><span id="barProt"></span></div>
+                <div class="row" style="justify-content:space-between"><small class="muted">Consumidas</small><small id="sumProtIn">0</small></div>
+              </div>
+              <div>
+                <div class="row" style="justify-content:space-between"><strong>Carbohidratos (g)</strong><span id="sumCarbGoal">—</span></div>
+                <div class="bar"><span id="barCarb"></span></div>
+                <div class="row" style="justify-content:space-between"><small class="muted">Consumidos</small><small id="sumCarbIn">0</small></div>
+              </div>
+              <div>
+                <div class="row" style="justify-content:space-between"><strong>Grasas (g)</strong><span id="sumFatGoal">—</span></div>
+                <div class="bar"><span id="barFat"></span></div>
+                <div class="row" style="justify-content:space-between"><small class="muted">Consumidas</small><small id="sumFatIn">0</small></div>
+              </div>
+            </div>
+          </div>
+          <div class="card stack-12">
+            <h3 style="margin:0">Atajos</h3>
+            <div class="row">
+              <button id="btnQuickAdd" class="btn btn-primary" type="button">+ Añadir comida</button>
+              <button id="btnSetTodayTargets" class="btn" type="button">Aplicar metas guardadas</button>
+            </div>
+            <p class="muted">Consejo: guarda tus alimentos frecuentes para registrarlos en 2 clics.</p>
+          </div>
+          <div class="card stack-12">
+            <h3 style="margin:0">Metas guardadas</h3>
+            <div class="stack-8">
+              <div class="row" style="gap:8px">
+                <span class="pill">Mantenimiento</span>
+                <span class="pill">Déficit leve</span>
+                <span class="pill">Superávit leve</span>
+              </div>
+              <p class="muted">Puedes recalcular desde la Calculadora y guardar como preset.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALCULADORA DE MACROS -->
+      <section id="calculadora" class="stack-16 hide" aria-labelledby="calcTitle">
+        <h3 id="calcTitle" style="margin:0">Calculadora de macros</h3>
+        <form id="macroForm" class="card stack-12" novalidate>
+          <div class="grid-3">
+            <div>
+              <label for="sex">Sexo</label>
+              <select id="sex" required>
+                <option value="" disabled selected>Selecciona…</option>
+                <option value="male">Masculino</option>
+                <option value="female">Femenino</option>
+              </select>
+            </div>
+            <div>
+              <label for="age">Edad (años)</label>
+              <input id="age" type="number" min="10" max="100" inputmode="numeric" placeholder="30" required />
+            </div>
+            <div>
+              <label for="height">Estatura (cm)</label>
+              <input id="height" type="number" min="120" max="230" inputmode="numeric" placeholder="175" required />
+            </div>
+            <div>
+              <label for="weight">Peso (kg)</label>
+              <input id="weight" type="number" min="30" max="250" step="0.1" inputmode="decimal" placeholder="75" required />
+            </div>
+            <div>
+              <label for="activity">Actividad</label>
+              <select id="activity" required>
+                <option value="" disabled selected>Selecciona…</option>
+                <option value="1.2">Sedentario</option>
+                <option value="1.375">Ligero (1-3 d/sem)</option>
+                <option value="1.55">Moderado (3-5 d/sem)</option>
+                <option value="1.725">Intenso (6-7 d/sem)</option>
+                <option value="1.9">Muy intenso (atleta)</option>
+              </select>
+            </div>
+            <div>
+              <label for="goal">Objetivo</label>
+              <select id="goal" required>
+                <option value="maintain">Mantener</option>
+                <option value="deficit">Déficit (−10%)</option>
+                <option value="surplus">Superávit (+10%)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div>
+              <label for="protein">Proteína (g/kg)</label>
+              <input id="protein" type="number" step="0.1" min="1.4" max="2.6" value="2.0" required />
+            </div>
+            <div>
+              <label for="fatPct">Grasa (% kcal)</label>
+              <input id="fatPct" type="number" step="1" min="20" max="35" value="30" required />
+            </div>
+            <div class="row" style="align-items:flex-end">
+              <button id="btnCalc" type="submit" class="btn btn-primary">Calcular</button>
+              <button id="btnSavePreset" type="button" class="btn">Guardar preset</button>
+            </div>
+          </div>
+          <p id="calcMsg" class="muted" role="status" aria-live="polite"></p>
+          <div id="calcOut" class="grid-3 hide" aria-live="polite">
+            <div class="card"><strong>Calorías día</strong><div id="outKcal" style="font-size:28px;margin-top:6px">—</div></div>
+            <div class="card"><strong>Proteínas</strong><div id="outProt" style="font-size:28px;margin-top:6px">—</div><small class="muted">(4 kcal/g)</small></div>
+            <div class="card"><strong>Grasas</strong><div id="outFat" style="font-size:28px;margin-top:6px">—</div><small class="muted">(9 kcal/g)</small></div>
+            <div class="card"><strong>Carbohidratos</strong><div id="outCarb" style="font-size:28px;margin-top:6px">—</div><small class="muted">(4 kcal/g)</small></div>
+            <div class="card"><strong>Fibra recomendada</strong><div id="outFiber" style="font-size:20px;margin-top:6px">—</div><small class="muted">14 g por cada 1000 kcal</small></div>
+          </div>
+        </form>
+      </section>
+
+      <!-- COMIDAS -->
+      <section id="comidas" class="hide stack-16" aria-labelledby="foodsTitle">
+        <h3 id="foodsTitle" style="margin:0">Registro de comidas</h3>
+        <div class="grid-2">
+          <form id="foodForm" class="card stack-12" novalidate>
+            <h4 style="margin:0">Agregar alimento</h4>
+            <div class="grid-2">
+              <div>
+                <label for="fName">Nombre</label>
+                <input id="fName" type="text" placeholder="Yogurt griego natural" required />
+              </div>
+              <div>
+                <label for="fBrand">Marca (opcional)</label>
+                <input id="fBrand" type="text" placeholder="Laive" />
+              </div>
+            </div>
+            <div class="grid-3">
+              <div>
+                <label for="fServing">Ración (g/ml)</label>
+                <input id="fServing" type="number" min="1" step="1" placeholder="170" required />
+              </div>
+              <div>
+                <label for="fKcal">Kcal x ración</label>
+                <input id="fKcal" type="number" min="0" step="1" placeholder="120" required />
+              </div>
+              <div>
+                <label for="fProtein">Prot (g)</label>
+                <input id="fProtein" type="number" min="0" step="0.1" placeholder="17" required />
+              </div>
+              <div>
+                <label for="fCarb">Carb (g)</label>
+                <input id="fCarb" type="number" min="0" step="0.1" placeholder="6" required />
+              </div>
+              <div>
+                <label for="fFat">Grasa (g)</label>
+                <input id="fFat" type="number" min="0" step="0.1" placeholder="0" required />
+              </div>
+              <div>
+                <label for="fFiber">Fibra (g)</label>
+                <input id="fFiber" type="number" min="0" step="0.1" placeholder="0" />
+              </div>
+            </div>
+            <div class="row" style="justify-content:space-between">
+              <button id="btnSaveFood" type="submit" class="btn btn-primary">Guardar alimento</button>
+              <div class="row">
+                <label for="logQty">Registrar</label>
+                <input id="logQty" type="number" min="0.25" step="0.25" value="1" style="width:90px" />
+                <button id="btnLogFood" type="button" class="btn">+ al diario</button>
+              </div>
+            </div>
+            <p id="foodMsg" class="muted" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="card stack-12">
+            <div class="row" style="justify-content:space-between; align-items:center">
+              <h4 style="margin:0">Tus alimentos guardados</h4>
+              <input id="foodSearch" type="search" placeholder="Buscar…" style="max-width:260px" />
+            </div>
+            <table aria-label="Alimentos guardados">
+              <thead>
+                <tr><th>Alimento</th><th>Ración</th><th>Kcal</th><th>Prot</th><th>Carb</th><th>Grasa</th><th></th></tr>
+              </thead>
+              <tbody id="foodsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card stack-12">
+          <div class="row" style="justify-content:space-between; align-items:center">
+            <h4 style="margin:0">Diario de hoy <span id="todayLabel" class="muted"></span></h4>
+            <div class="row">
+              <button id="btnClearDay" class="btn" type="button">Limpiar</button>
+            </div>
+          </div>
+          <table aria-label="Diario de hoy">
+            <thead>
+            <tr><th>Alimento</th><th>Ración</th><th>Cantidad</th><th>Kcal</th><th>Prot</th><th>Carb</th><th>Grasa</th><th></th></tr>
+            </thead>
+            <tbody id="dayTable"></tbody>
+            <tfoot>
+              <tr>
+                <th class="right" colspan="3">Totales</th>
+                <th id="totKcal">0</th><th id="totProt">0</th><th id="totCarb">0</th><th id="totFat">0</th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- PROGRESO -->
+      <section id="progreso" class="hide stack-12" aria-labelledby="progTitle">
+        <h3 id="progTitle" style="margin:0">Progreso</h3>
+        <div class="card stack-12">
+          <p class="muted">Resumen semanal de adherencia (calorías consumidas vs meta).</p>
+          <div id="adherence" class="stack-12"></div>
+        </div>
+      </section>
+
+      <div class="center" style="margin-top:14px">
+        <button class="btn" type="button" id="btnLogout">Cerrar sesión</button>
+      </div>
     </section>
   </main>
 
-  <!-- MODALES: Signup / Login -->
+  <!-- MODALES: Signup / Login / Perfil -->
   <div id="signupModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+    <section class="modal">
       <div class="card" style="max-width:460px;width:100%">
         <h2 id="signupTitle">Crear cuenta</h2>
         <div class="stack-12" style="margin-top:8px">
           <div>
             <label for="suEmail">Correo</label>
-            <input id="suEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+            <input id="suEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" required />
           </div>
           <div>
             <label for="suPass">Contraseña</label>
-            <input id="suPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+            <input id="suPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required />
           </div>
         </div>
         <p id="suMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
@@ -185,17 +394,17 @@
   </div>
 
   <div id="loginModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+    <section class="modal">
       <div class="card" style="max-width:460px;width:100%">
         <h2 id="loginTitle">Iniciar sesión</h2>
         <div class="stack-12" style="margin-top:8px">
           <div>
             <label for="liEmail">Correo</label>
-            <input id="liEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+            <input id="liEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" required />
           </div>
           <div>
             <label for="liPass">Contraseña</label>
-            <input id="liPass" type="password" placeholder="Tu contraseña" autocomplete="current-password" />
+            <input id="liPass" type="password" placeholder="Tu contraseña" autocomplete="current-password" required />
           </div>
         </div>
         <p id="liMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
@@ -210,9 +419,8 @@
     </section>
   </div>
 
-  <!-- Perfil -->
   <div id="profileModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+    <section class="modal">
       <div class="card" style="max-width:460px;width:100%">
         <h2 id="profileTitle">Tu perfil</h2>
         <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
@@ -239,105 +447,294 @@
     <p class="muted">© <span id="year"></span> ProteeMVT. Todos los derechos reservados.</p>
   </footer>
 
+  <!-- Toaster -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    const { createClient } = supabase;
+  // =====================
+  // Infraestructura & Utilidades
+  // =====================
+  const { createClient } = supabase;
+  const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const $ = (id)=>document.getElementById(id);
+  const show = (id)=>$(id).classList.remove('hide');
+  const hide = (id)=>$(id).classList.add('hide');
+  const fmt = (n, d=0)=>Number(n||0).toLocaleString('es-PE',{ maximumFractionDigits:d, minimumFractionDigits:d });
+  const todayKey = ()=> new Date().toISOString().slice(0,10); // YYYY-MM-DD
 
-    const $ = (id)=>document.getElementById(id);
-    const show = (id)=>$(id).classList.remove('hide');
-    const hide = (id)=>$(id).classList.add('hide');
+  const toast = (msg)=>{ const t=$("toast"); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2600); };
 
-    function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>$(id).classList.toggle("hide", id!==sec)); }
+  // Local persistence fallback (si no hay tablas o estás offline)
+  const LS = {
+    get: (k, fallback)=>{ try{ return JSON.parse(localStorage.getItem(k)) ?? fallback; }catch{ return fallback; } },
+    set: (k, v)=> localStorage.setItem(k, JSON.stringify(v)),
+    del: (k)=> localStorage.removeItem(k)
+  };
 
-    // ====== Modales helpers
-    function openModal(id){ show(id); document.body.style.overflow='hidden'; }
-    function closeModal(id){ hide(id); document.body.style.overflow=''; }
+  // =====================
+  // Autenticación & Perfil
+  // =====================
+  async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
+  async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.warn('profiles select', error.message); return null; } return data||null; }
+  async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.warn('profiles insert', error.message); prof = await getProfile(user.id); openProfileOnFirstLogin = true; } return prof; }
 
-    // ====== Perfil API
-    async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
-    async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.error(error); return null; } return data||null; }
-    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.error(error); prof = await getProfile(user.id); openModal('profileModal'); } return prof; }
+  function setLoggedUI(user){ show("topbar"); hide("hero-guest"); show("dashboard"); $("userBadge").textContent = user.email; }
+  function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("dashboard"); }
 
-    function setLoggedUI({ user, profile }){
-      show("topbar"); // header visible
-      hide("hero-guest");
-      show("dashboard");
-      $("userBadge").textContent = user.email;
+  // =====================
+  // Navegación por tabs
+  // =====================
+  const tabs = ["resumen","calculadora","comidas","progreso"];
+  function setTab(name){ tabs.forEach(id=>{ const btn = document.querySelector(`button[data-tab="${id}"]`); const sec=$(id); const active = id===name; if(btn){ btn.setAttribute('aria-current', active? 'page':'false'); } if(sec){ sec.classList.toggle('hide', !active); } }); }
+
+  // =====================
+  // Calculadora de Macros (Mifflin-St Jeor -> TDEE -> reparto)
+  // =====================
+  function mifflinStJeor({ sex, age, height, weight }){
+    // height cm, weight kg
+    const s = sex==='male' ? 5 : -161;
+    return (10*weight) + (6.25*height) - (5*age) + s;
+  }
+  function tdee({ bmr, activity }){ return bmr * activity; }
+  function goalAdj(kcal, goal){ if(goal==='deficit') return kcal*0.90; if(goal==='surplus') return kcal*1.10; return kcal; }
+  function splitMacros({ weight, kcal, proteinGPerKg, fatPct }){
+    const pG = proteinGPerKg * weight; const pKcal = pG*4;
+    const fKcal = (fatPct/100) * kcal; const fG = fKcal/9;
+    const cKcal = Math.max(kcal - pKcal - fKcal, 0); const cG = cKcal/4;
+    const fiber = Math.round((kcal/1000)*14);
+    return { kcal: Math.round(kcal), pG: Math.round(pG), cG: Math.round(cG), fG: Math.round(fG), fiber };
+  }
+
+  function calcAndRender(){
+    const sex=$("sex").value, age=+$("age").value, height=+$("height").value, weight=+$("weight").value;
+    const activity=+$("activity").value, goal=$("goal").value;
+    const proteinGPerKg=+$("protein").value, fatPct=+$("fatPct").value;
+    if(!sex||!age||!height||!weight||!activity||!goal||!proteinGPerKg||!fatPct){ $("calcMsg").textContent='Completa todos los campos.'; return; }
+    if(fatPct<15||fatPct>40){ $("calcMsg").textContent='El % de grasa debe estar entre 15% y 40%.'; return; }
+    const bmr = mifflinStJeor({ sex, age, height, weight });
+    const kcal = goalAdj(tdee({ bmr, activity }), goal);
+    const out = splitMacros({ weight, kcal, proteinGPerKg, fatPct });
+    $("outKcal").textContent = fmt(out.kcal);
+    $("outProt").textContent = `${fmt(out.pG)} g`;
+    $("outCarb").textContent = `${fmt(out.cG)} g`;
+    $("outFat").textContent  = `${fmt(out.fG)} g`;
+    $("outFiber").textContent= `${fmt(out.fiber)} g`;
+    show('calcOut');
+    $("calcMsg").textContent='Cálculo actualizado ✅';
+    // persistimos como preset temporal (sin guardar explícitamente)
+    LS.set('last_calc', { sex, age, height, weight, activity, goal, proteinGPerKg, fatPct, out, ts:Date.now() });
+  }
+
+  $("macroForm").addEventListener('submit', (e)=>{ e.preventDefault(); calcAndRender(); });
+  $("btnSavePreset").addEventListener('click', async ()=>{
+    const last = LS.get('last_calc'); if(!last){ toast('Primero calcula tus macros.'); return; }
+    // Guardamos como preset local y en supabase si existe tabla
+    const presets = LS.get('presets', []); presets.unshift({ id:crypto.randomUUID(), ...last }); LS.set('presets', presets);
+    toast('Preset guardado.');
+    try{ const user = await getUser(); if(user){ await sb.from('macro_presets').insert({ user_id:user.id, payload:last }); } }catch(err){ console.warn('macro_presets insert', err?.message); }
+  });
+
+  // Aplicar metas guardadas del último cálculo a las metas del día
+  $("btnSetTodayTargets").addEventListener('click', ()=>{
+    const last = LS.get('last_calc'); if(!last){ toast('Primero calcula y guarda un preset.'); return; }
+    LS.set('targets:'+todayKey(), last.out);
+    toast('Metas de hoy actualizadas.');
+    renderSummary();
+  });
+
+  // =====================
+  // Alimentos y Diario
+  // =====================
+  function normalizeFood(f){
+    return {
+      id: f.id || crypto.randomUUID(),
+      name: (f.name||'').trim(), brand: (f.brand||'').trim(),
+      serving: +f.serving, kcal:+f.kcal, p:+f.p, c:+f.c, g:+f.g, fi:+f.fi
+    };
+  }
+  function saveFoodLocal(food){ const list = LS.get('foods', []); const idx=list.findIndex(x=>x.name.toLowerCase()===food.name.toLowerCase() && x.brand.toLowerCase()===food.brand.toLowerCase()); if(idx>-1) list[idx]=food; else list.unshift(food); LS.set('foods', list); return food; }
+
+  async function saveFoodSupabase(food){
+    try{ const user = await getUser(); if(!user) return; await sb.from('foods').upsert({ user_id:user.id, food }); }
+    catch(err){ console.warn('foods upsert', err?.message); }
+  }
+
+  function renderFoods(filter=''){
+    const tbody=$("foodsTable"); tbody.innerHTML='';
+    const list = LS.get('foods', []);
+    const q = (filter||'').toLowerCase();
+    list.filter(x=> x.name.toLowerCase().includes(q) || x.brand.toLowerCase().includes(q)).slice(0,200).forEach(f=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td><strong>${escapeHtml(f.name)}</strong> <small class="muted">${escapeHtml(f.brand||'')}</small></td>
+        <td>${fmt(f.serving)} g</td><td>${fmt(f.kcal)}</td><td>${fmt(f.p,1)}</td><td>${fmt(f.c,1)}</td><td>${fmt(f.g,1)}</td>
+        <td class="right"><button class="btn btn-soft" data-add="${f.id}">+ diario</button></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function escapeHtml(s){ return (s||'').replace(/[&<>\"]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]) ); }
+
+  function logToDay(food, qty){
+    const key = 'day:'+todayKey();
+    const rows = LS.get(key, []);
+    rows.push({ id:crypto.randomUUID(), fid:food.id, name:food.name, brand:food.brand, serving:food.serving, qty, kcal:food.kcal*qty, p:food.p*qty, c:food.c*qty, g:food.g*qty });
+    LS.set(key, rows);
+    renderDay(); renderSummary();
+  }
+
+  function removeFromDay(id){
+    const key='day:'+todayKey();
+    const rows = LS.get(key, []).filter(r=>r.id!==id);
+    LS.set(key, rows); renderDay(); renderSummary();
+  }
+
+  function totals(rows){
+    return rows.reduce((acc,r)=>({ kcal:acc.kcal+r.kcal, p:acc.p+r.p, c:acc.c+r.c, g:acc.g+r.g }), { kcal:0, p:0, c:0, g:0 });
+  }
+
+  function renderDay(){
+    $("todayLabel").textContent = todayKey();
+    const key='day:'+todayKey();
+    const rows = LS.get(key, []);
+    const tbody=$("dayTable"); tbody.innerHTML='';
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td><strong>${escapeHtml(r.name)}</strong> <small class="muted">${escapeHtml(r.brand||'')}</small></td>
+        <td>${fmt(r.serving)} g</td>
+        <td>${fmt(r.qty,2)}</td>
+        <td>${fmt(r.kcal)}</td><td>${fmt(r.p,1)}</td><td>${fmt(r.c,1)}</td><td>${fmt(r.g,1)}</td>
+        <td class="right"><button class="btn" data-del="${r.id}">Eliminar</button></td>`;
+      tbody.appendChild(tr);
+    });
+    const t = totals(rows);
+    $("totKcal").textContent=fmt(t.kcal);
+    $("totProt").textContent=fmt(t.p,1);
+    $("totCarb").textContent=fmt(t.c,1);
+    $("totFat").textContent=fmt(t.g,1);
+  }
+
+  function renderSummary(){
+    const key='day:'+todayKey();
+    const rows = LS.get(key, []);
+    const t = totals(rows);
+    const targets = LS.get('targets:'+todayKey(), null);
+    let kcal=0,p=0,c=0,g=0; if(targets){ kcal=targets.kcal; p=targets.pG; c=targets.cG; g=targets.fG; }
+    $("sumCalGoal").textContent = kcal? fmt(kcal): '—';
+    $("sumProtGoal").textContent= p? fmt(p): '—';
+    $("sumCarbGoal").textContent= c? fmt(c): '—';
+    $("sumFatGoal").textContent = g? fmt(g): '—';
+    $("sumCalIn").textContent = fmt(t.kcal);
+    $("sumProtIn").textContent= fmt(t.p,1);
+    $("sumCarbIn").textContent= fmt(t.c,1);
+    $("sumFatIn").textContent = fmt(t.g,1);
+    // barras
+    const pct = (v,goal)=> !goal? 0 : Math.min(Math.round((v/goal)*100), 100);
+    $("barCal").style.width = pct(t.kcal,kcal)+"%";
+    $("barProt").style.width= pct(t.p,p)+"%";
+    $("barCarb").style.width= pct(t.c,c)+"%";
+    $("barFat").style.width = pct(t.g,g)+"%";
+  }
+
+  // Progreso semanal simple (por accesibilidad, usamos barras horizontales)
+  function renderAdherence(){
+    const host=$("adherence"); host.innerHTML='';
+    const days=[...Array(7).keys()].map(i=>{ const d=new Date(); d.setDate(d.getDate()-i); return d.toISOString().slice(0,10); }).reverse();
+    const frag=document.createDocumentFragment();
+    days.forEach(d=>{
+      const rows = LS.get('day:'+d, []); const t = totals(rows);
+      const targets = LS.get('targets:'+d, null) || LS.get('targets:'+todayKey(), null);
+      const kcalTarget = targets?.kcal || 2000;
+      const pct = Math.min(Math.round((t.kcal/kcalTarget)*100), 130);
+      const wrap=document.createElement('div'); wrap.className='stack-8';
+      wrap.innerHTML = `<div class="row" style="justify-content:space-between"><strong>${d}</strong><small class="muted">${fmt(t.kcal)} / ${fmt(kcalTarget)} kcal</small></div>
+        <div class="bar"><span style="width:${pct}%"></span></div>`;
+      frag.appendChild(wrap);
+    });
+    host.appendChild(frag);
+  }
+
+  // Eventos UI
+  document.addEventListener('click', (e)=>{
+    const t=e.target;
+    if(t.matches('nav.tabs button')){ setTab(t.dataset.tab); }
+    if(t.id==='btnLogout' || t.id==='btnHeaderLogout'){ logout(); }
+    if(t.id==='btnOpenSignup'){ openModal('signupModal'); }
+    if(t.id==='btnOpenLogin'){ openModal('loginModal'); }
+    if(t.id==='btnCloseSignup'){ closeModal('signupModal'); }
+    if(t.id==='btnCloseLogin'){ closeModal('loginModal'); }
+    if(t.id==='btnProfile'){ openProfileModal(); }
+    if(t.id==='btnCloseProfile'){ closeModal('profileModal'); }
+    if(t.dataset.add){ const f = LS.get('foods', []).find(x=>x.id===t.dataset.add); const qty = parseFloat($("logQty").value||'1')||1; if(f){ logToDay(f, qty); toast('Registrado en el diario.'); } }
+    if(t.dataset.del){ removeFromDay(t.dataset.del); }
+    if(t.id==='btnClearDay'){ if(confirm('¿Seguro de limpiar el diario de hoy?')){ LS.set('day:'+todayKey(), []); renderDay(); renderSummary(); } }
+    if(t.id==='btnQuickAdd'){ setTab('comidas'); $("fName").focus(); }
+  });
+
+  $("foodSearch").addEventListener('input', ()=> renderFoods($("foodSearch").value));
+
+  $("foodForm").addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const food = normalizeFood({
+      name: $("fName").value, brand: $("fBrand").value,
+      serving: $("fServing").value, kcal: $("fKcal").value,
+      p: $("fProtein").value, c: $("fCarb").value, g: $("fFat").value, fi: $("fFiber").value
+    });
+    if(!food.name || !food.serving){ $("foodMsg").textContent='Completa al menos nombre y ración.'; return; }
+    saveFoodLocal(food);
+    renderFoods($("foodSearch").value);
+    $("foodMsg").textContent='Alimento guardado ✅';
+    try{ await saveFoodSupabase(food); }catch{}
+  });
+
+  $("btnLogFood").addEventListener('click', ()=>{
+    const food = normalizeFood({
+      name: $("fName").value, brand: $("fBrand").value,
+      serving: $("fServing").value, kcal: $("fKcal").value,
+      p: $("fProtein").value, c: $("fCarb").value, g: $("fFat").value, fi: $("fFiber").value
+    });
+    if(!food.name || !food.serving){ $("foodMsg").textContent='Completa al menos nombre y ración.'; return; }
+    // guardamos (para futuras búsquedas) y registramos en el día
+    saveFoodLocal(food);
+    const qty = parseFloat($("logQty").value||'1')||1; logToDay(food, qty);
+    toast('Registrado en el diario.');
+    renderFoods($("foodSearch").value);
+  });
+
+  async function openProfileModal(){ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); $("profEmail").value = user.email || ''; $("profName").value = profile?.display_name || ''; openModal('profileModal'); }
+  $("btnSaveProfile").addEventListener('click', async ()=>{ const user = await getUser(); if(!user) return; const display_name = ( $("profName").value || '' ).trim() || user.email; const { error } = await sb.from('profiles').upsert({ id:user.id, display_name }); $("profMsg").textContent = error ? ('Error: '+error.message) : 'Guardado ✅'; });
+
+  // Modales helpers
+  function openModal(id){ show(id); document.body.style.overflow='hidden'; }
+  function closeModal(id){ hide(id); document.body.style.overflow=''; }
+
+  async function logout(){ await sb.auth.signOut(); setGuestUI(); }
+
+  // Restaurar sesión desde hash (Supabase magic link)
+  (async ()=>{
+    $("year").textContent = new Date().getFullYear();
+    const hash = window.location.hash || "";
+    if(hash.includes("access_token") && hash.includes("refresh_token")){
+      const p = new URLSearchParams(hash.substring(1));
+      await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
+      history.replaceState({}, document.title, window.location.pathname);
     }
-    function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("dashboard"); }
+    if(hash.includes("type=recovery")) openModal('loginModal');
 
-    async function afterLoginShowApp(){ const user = await getUser(); if(!user){ setGuestUI(); return; } const profile = await ensureProfile(); setLoggedUI({ user, profile }); }
+    const { data:{ user } } = await sb.auth.getUser();
+    if(user){ setLoggedUI(user); await ensureProfile(); } else { setGuestUI(); }
 
-    // ====== Botones acceso
-    $("btnOpenSignup").onclick = ()=> openModal('signupModal');
-    $("btnOpenLogin").onclick = ()=> openModal('loginModal');
-
-    // ====== Signup
-    $("btnCloseSignup").onclick = ()=> closeModal('signupModal');
-    $("btnDoSignup").onclick = async ()=>{
-      const email = ( $("suEmail").value || '' ).trim();
-      const password = ( $("suPass").value || '' ).trim();
-      const msg = $("suMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
-      if(password.length < 6){ msg.textContent='La contraseña debe tener al menos 6 caracteres.'; return; }
-      const { data, error } = await sb.auth.signUp({ email, password });
-      if(error){ msg.textContent = 'Error: '+error.message; return; }
-      if(data?.user && !data.session){ msg.textContent='Cuenta creada. Revisa tu correo para confirmar.'; }
-      else{ msg.textContent='Cuenta creada y sesión iniciada ✅'; closeModal('signupModal'); await afterLoginShowApp(); }
-    };
-
-    // ====== Login
-    $("btnCloseLogin").onclick = ()=> closeModal('loginModal');
-    $("btnDoLogin").onclick = async ()=>{
-      const email = ( $("liEmail").value || '' ).trim();
-      const password = ( $("liPass").value || '' ).trim();
-      const msg = $("liMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
-      if(!password){ msg.textContent='Ingresa tu contraseña.'; return; }
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if(error){ msg.textContent = 'No pudimos iniciar sesión: '+error.message; return; }
-      msg.textContent='Sesión iniciada ✅';
-      closeModal('loginModal');
-      await afterLoginShowApp();
-    };
-
-    // ====== Forgot password
-    $("btnForgot").onclick = async ()=>{
-      const email = ( $("liEmail").value || '' ).trim();
-      const msg = $("liMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Escribe el correo que usaste para registrarte.'; return; }
-      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
-      msg.textContent = error ? ('No se pudo enviar: '+error.message) : 'Te enviamos un enlace para restablecer tu contraseña ✅';
-    };
-
-    async function logout(){ await sb.auth.signOut(); setGuestUI(); }
-    $("btnHeaderLogout").onclick = logout;
-
-    // ====== Perfil
-    $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); $("profEmail").value = user.email || ''; $("profName").value = profile?.display_name || ''; openModal('profileModal'); };
-    $("btnCloseProfile").onclick = ()=> closeModal('profileModal');
-    $("btnSaveProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const display_name = ( $("profName").value || '' ).trim() || user.email; const { error } = await sb.from('profiles').upsert({ id:user.id, display_name }); $("profMsg").textContent = error ? ('Error: '+error.message) : 'Guardado ✅'; };
-
-    // ====== Restaurar sesión desde enlaces de email
-    (async ()=>{
-      $("year").textContent = new Date().getFullYear();
-      const hash = window.location.hash || "";
-      if(hash.includes("access_token") && hash.includes("refresh_token")){
-        const p = new URLSearchParams(hash.substring(1));
-        await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
-        history.replaceState({}, document.title, window.location.pathname);
-      }
-      if(hash.includes("type=recovery")){
-        // Si viene desde email de recuperación, abrir modal de login para que establezca nueva pass si el flujo lo pide
-        openModal('loginModal');
-      }
-      const { data:{ user } } = await sb.auth.getUser();
-      if(user) await afterLoginShowApp(); else setGuestUI();
-    })();
+    // Estado inicial UI
+    setTab('resumen');
+    renderFoods('');
+    renderDay();
+    renderSummary();
+    renderAdherence();
+  })();
   </script>
 </body>
 </html>
