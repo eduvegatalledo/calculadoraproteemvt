@@ -4,30 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ProteeMVT — Nutrición simple, progreso real</title>
-  <meta name="description" content="ProteeMVT: calcula tus macros, registra comidas y sigue tu progreso con una experiencia visual agradable y enfocada." />
+  <meta name="description" content="ProteeMVT: calcula tus macros, registra lo que comes y mide tu avance." />
   <meta name="color-scheme" content="light" />
   <meta name="theme-color" content="#12d59a" />
 
   <!-- Social -->
   <meta property="og:title" content="ProteeMVT — Nutrición simple, progreso real" />
-  <meta property="og:description" content="Calcula macros, registra comidas y mira tu progreso con una UI clara y motivadora." />
+  <meta property="og:description" content="Calcula tus macros, registra lo que comes y mide tu avance." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/og-preview.png" />
   <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Tipografías: display + legible -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Sora:wght@400;600;800&display=swap" rel="stylesheet" />
+  <!-- Tipografías redondeadas -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Rubik+Rounded:wght@400;500;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ========= Identidad Visual: Clean Fresh ========= */
     :root{
       --emerald:#10b981;   /* primario */
       --aqua:#32e6ff;      /* acento */
       --ink:#0b1a20;       /* texto principal */
       --ink-2:#355059;     /* texto secundario */
       --paper:#f8fffb;     /* fondo uniforme */
-      --glass: #ffffff;    /* superficies */
+      --glass:#ffffff;     /* superficies */
       --stroke: rgba(12,130,94,.14);
       --ring: rgba(18,213,154,.22);
       --shadow: 0 14px 34px rgba(5,28,22,.08), 0 4px 14px rgba(5,28,22,.06);
@@ -36,89 +35,74 @@
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
-      font-family:'Plus Jakarta Sans','Sora',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      font-family:'Rubik Rounded','Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
       color:var(--ink);
-      background: var(--paper); /* Fondo más uniforme */
+      background: var(--paper);
       min-height:100dvh;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
-    /* ======= Contenedores ======= */
     .wrap{ max-width:1200px; margin:0 auto; padding:0 20px 72px; }
 
-    /* ======= Topbar ======= */
+    /* Topbar (solo cuando hay sesión) */
     header#topbar{ position:sticky; top:0; z-index:30; }
     .tb{ max-width:1200px; margin:10px auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--glass); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow); }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:#0a3027; letter-spacing:.2px}
-    .brand-mark{ width:28px; height:28px; border-radius:9px; background: linear-gradient(135deg,var(--emerald), var(--aqua)); box-shadow:0 6px 18px rgba(16,185,129,.28); }
     .tb-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .badge-email{color:#1c3b33;font-size:13px; opacity:.85}
 
-    /* ======= Botones & Inputs ======= */
-    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:14px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease; }
+    /* Botones & Inputs */
+    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:999px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease; }
     .btn:active{ transform:translateY(1px) }
-    .btn-primary{ background:linear-gradient(135deg,var(--emerald), #08c98f); color:#04241b; border-color:transparent; box-shadow: 0 10px 22px rgba(16,185,129,.24); }
+    .btn-primary{ background:linear-gradient(135deg,#16d39f,#0fb787); color:#04241b; border-color:transparent; box-shadow: 0 12px 26px rgba(16,185,129,.26), inset 0 -2px 0 rgba(0,0,0,.06); }
     .btn-primary:hover{ filter:brightness(1.03) }
     .btn-soft{ background:#f3fbf8; border-color:#e3f3ed }
-    .btn-ghost{ background:transparent; border-color:transparent }
     .btn[disabled]{ opacity:.6; cursor:not-allowed }
 
-    label{ font-weight:700; font-size:13px; display:inline-block; margin-bottom:6px }
-    input{ width:100%; padding:14px 14px; border-radius:14px; border:1px solid #e5efea; background:#fff; font-size:15px; outline:none; transition:box-shadow .18s,border .18s,transform .03s; }
+    label{ font-weight:700; font-size:13px; display:inline-block; margin-bottom:6px; letter-spacing:.2px }
+    input{ width:100%; padding:15px 16px; border-radius:16px; border:1px solid #e5efea; background:#fff; font-size:16px; outline:none; transition:box-shadow .18s,border .18s,transform .03s; }
     input:focus{ border-color:var(--emerald); box-shadow:0 0 0 4px var(--ring); }
 
-    /* ======= Hero ======= */
+    /* Hero reorganizado: título a la izquierda, acceso a la derecha */
     .hero{ position:relative; color:#0a2a22; }
-    .hero-pad{ padding: clamp(36px, 6.4vw, 96px) 16px 28px; display:grid; grid-template-columns: 1fr; gap:10px }
-    .display{ margin:10px 0 8px; line-height:1.04; font-weight:800; font-family:'Sora','Plus Jakarta Sans',sans-serif; font-size: clamp(34px, 6vw, 64px); color:#0c3e33; letter-spacing:.2px }
-    .lead{ margin:8px 0 0; max-width:760px; font-size: clamp(15px, 2.1vw, 19px); color:#345b53; opacity:.98 }
+    .hero-pad{ padding: clamp(30px, 6vw, 60px) 20px; }
+    .hero-grid{ display:grid; grid-template-columns:1fr; gap:20px }
+    @media (min-width:980px){ .hero-grid{ grid-template-columns:1.2fr .8fr } }
 
-    /* CTA alineada a la derecha en desktop */
-    .hero-cta{ display:flex; justify-content:flex-end; }
-    .hero-cta .btn{ padding:10px 14px; font-weight:800 }
-    .hero-cta .btn-primary{ font-size:14px } /* un poco más pequeña */
+    .display{ margin:8px 0 6px; line-height:1.02; font-weight:800; font-family:'Poppins','Rubik Rounded',sans-serif; font-size: clamp(38px, 7vw, 76px); color:#0c3e33; letter-spacing:.1px }
+    .lead{ margin:10px 0 0; max-width:820px; font-size: clamp(16px, 2.2vw, 20px); color:#2f5b52; opacity:.98 }
+    .subbrand{ margin:6px 0 2px; font-family:'Poppins','Rubik Rounded',sans-serif; color:#1c433a; opacity:.9 }
 
-    @media (min-width:900px){ .hero-pad{ grid-template-columns: 1.2fr .8fr; align-items:end } }
-
-    /* ======= Tarjetas / info ======= */
-    .grid-2{ display:grid; gap:18px; grid-template-columns:1fr }
-    @media (min-width:980px){ .grid-2{ grid-template-columns:1.1fr .9fr } }
+    /* Card genérico */
     .card{ position:relative; background:var(--glass); border:1px solid var(--stroke); border-radius:var(--radius-xl); box-shadow:var(--shadow); padding:20px; }
-    h2{ margin:0 0 10px; font-size:24px; color:#0e3e34; letter-spacing:.2px }
-    .muted{ color:#40675e; font-size:13px }
+
+    /* Acceso pulcro: sólo dos botones */
+    .access-card h2{ margin:0 0 10px; font-size:22px; color:#0e3e34 }
+    .access-card .muted{ color:#40675e; font-size:13px; margin:0 0 10px }
+
+    /* Tabs / dashboard */
+    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
+    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 16px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8; font-family:'Poppins','Rubik Rounded',sans-serif }
+
+    .grid-3{ display:grid; gap:18px; grid-template-columns:1fr }
+    @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr) } }
+    .feat-card{ background:#ffffff; border:1px solid #e6f1ec; border-radius:18px; padding:18px; box-shadow:var(--shadow) }
+    .feat-card h3{ margin:0 0 8px; font-size:18px; color:#0a372d; font-family:'Poppins','Rubik Rounded',sans-serif }
+    .feat-card p{ margin:0; color:#335a52; font-size:14px }
+
     .hide{ display:none !important }
+    .muted{ color:#40675e; font-size:13px }
     .center{ text-align:center }
     .stack-10{ display:grid; gap:10px }
     .stack-12{ display:grid; gap:12px }
     .row{ display:flex; gap:10px; flex-wrap:wrap }
-
-    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
-    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 14px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8 }
-
-    /* ======= Sección Beneficios al final ======= */
-    .grid-3{ display:grid; gap:18px; grid-template-columns:1fr }
-    @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr) } }
-    .feat-card{ background:#ffffff; border:1px solid #e6f1ec; border-radius:18px; padding:18px; box-shadow:var(--shadow) }
-    .feat-card h3{ margin:0 0 8px; font-size:18px; color:#0a372d }
-    .feat-card p{ margin:0; color:#335a52; font-size:14px }
-
-    /* ======= Modal ======= */
-    #profileModal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22); padding:16px; z-index:50 }
-    @media (prefers-reduced-motion:no-preference){
-      #profileModal .card{ animation:pop .18s ease-out }
-      @keyframes pop{ from{transform:translateY(8px) scale(.98); opacity:0} to{transform:none; opacity:1} }
-    }
-
-    body.modal-open{ overflow:hidden }
-    footer{ margin-top:20px }
   </style>
 </head>
 <body>
 
-  <!-- ===== Topbar (solo usuarios) ===== -->
+  <!-- Topbar (visible al iniciar sesión) -->
   <header id="topbar" class="hide" role="banner">
     <div class="tb">
-      <div class="brand" aria-label="ProteeMVT"><span class="brand-mark" aria-hidden="true"></span> ProteeMVT</div>
+      <div class="brand" aria-label="ProteeMVT" style="display:none"></div>
       <div class="tb-actions">
         <span id="userBadge" class="badge-email" aria-live="polite"></span>
         <button id="btnProfile" class="btn btn-soft" type="button" aria-haspopup="dialog" aria-controls="profileModal">Tu perfil</button>
@@ -127,106 +111,48 @@
     </div>
   </header>
 
-  <!-- ===== Hero Invitado/Usuario (con CTA a la derecha) ===== -->
+  <!-- HERO: izquierda título, derecha acceso -->
   <section id="hero-guest" class="hero" aria-labelledby="heroGuestTitle">
-    <div class="hero-pad">
-      <div>
-        <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
-        <p class="lead">Calcula tus macros, registra lo que comes y sigue tu avance. Interfaz clara y agradable para usar todos los días.</p>
-      </div>
-      <div class="hero-cta">
-        <a href="#auth" class="btn btn-primary" aria-label="Ir a la sección para acceder a tu cuenta">Acceder a tu cuenta</a>
+    <div class="wrap hero-pad">
+      <div class="hero-grid">
+        <!-- Columna izquierda: título -->
+        <div>
+          <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
+          <p class="subbrand">ProteeMVT</p>
+          <p class="lead">Calcula tus macros, registra lo que comes y mide tu avance.</p>
+        </div>
+
+        <!-- Columna derecha: acceso -->
+        <aside class="card access-card" aria-labelledby="accessTitle">
+          <h2 id="accessTitle">Acceso</h2>
+          <p class="muted">Elige una opción para continuar.</p>
+          <div class="stack-10">
+            <button id="btnOpenSignup" class="btn btn-primary" type="button">Regístrate aquí</button>
+            <button id="btnOpenLogin" class="btn btn-soft" type="button">Iniciar sesión</button>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
 
-  <section id="hero-user" class="hero hide" aria-labelledby="heroUserTitle">
-    <div class="hero-pad">
-      <div>
-        <h1 id="heroUserTitle" class="display"><span id="helloName">¡Bienvenido!</span></h1>
-        <p class="lead">Revisa tu resumen, registra comidas y mira tus tendencias.</p>
-      </div>
-      <div class="hero-cta">
-        <a href="#dashboard" class="btn btn-primary">Ir al panel</a>
-      </div>
-    </div>
-  </section>
-
+  <!-- DASHBOARD (se muestra después de iniciar sesión) -->
   <main class="wrap" id="main">
-
-    <!-- Acceso + Lateral -->
-    <section class="grid-2" aria-label="Acceso y descripción">
-      <!-- Auth / Dashboard -->
-      <section id="auth" class="card" aria-labelledby="authTitle">
-        <h2 id="authTitle">Accede a tu cuenta</h2>
-        <p class="muted">Usa tu correo y contraseña. Si no tienes cuenta, podrás crearla en un paso.</p>
-
-        <!-- INVITADO: formulario -->
-        <div id="auth-section" class="stack-12" style="margin-top:10px">
-          <div>
-            <label for="emailInput">Correo</label>
-            <input id="emailInput" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
-          </div>
-          <div>
-            <label for="passInput">Contraseña</label>
-            <input id="passInput" type="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
-          </div>
-
-          <div class="stack-10" style="margin-top:12px">
-            <button id="btnEmail" class="btn btn-primary" type="button">Acceder</button>
-            <div class="row">
-              <button id="btnResend" class="btn btn-soft" type="button" style="flex:1">Reenviar verificación</button>
-              <button id="btnForgot" class="btn btn-soft" type="button" style="flex:1">Olvidé mi contraseña</button>
-            </div>
-          </div>
-
-          <p id="msg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
-
-          <!-- Sugerencia de crear cuenta cuando el login falla -->
-          <div id="signupRow" class="hide" style="margin-top:6px">
-            <button id="btnSignupNow" class="btn btn-soft" type="button">Crear cuenta con este correo</button>
-          </div>
-        </div>
-
-        <!-- RECOVERY: nueva contraseña -->
-        <div id="recovery-section" class="hide stack-12" aria-labelledby="recTitle">
-          <h2 id="recTitle">Restablecer contraseña</h2>
-          <p class="muted">Ingresa tu nueva contraseña para continuar.</p>
-          <div class="stack-12" style="margin-top:8px">
-            <div>
-              <label for="newPassInput">Nueva contraseña</label>
-              <input id="newPassInput" type="password" placeholder="Nueva contraseña" autocomplete="new-password" />
-            </div>
-          </div>
-          <button id="btnSetNew" class="btn btn-primary" type="button" style="width:auto; margin-top:10px">Guardar nueva contraseña</button>
-          <p id="recMsg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
-        </div>
-
-        <!-- USUARIO: dashboard -->
-        <div id="dashboard" class="hide" aria-label="Panel de usuario" style="margin-top:6px">
-          <h2>Bienvenido 👋</h2>
-          <nav class="tabs" aria-label="Secciones del panel">
-            <button type="button" onclick="showSection('resumen')">🏠 Resumen</button>
-            <button type="button" onclick="showSection('comidas')">🍽️ Comidas</button>
-            <button type="button" onclick="showSection('progreso')">📊 Progreso</button>
-          </nav>
-          <div id="resumen"><p class="muted">Aquí verás tu progreso y tus metas del día.</p></div>
-          <div id="comidas" class="hide"><p class="muted">Próximamente: registro y búsqueda de alimentos.</p></div>
-          <div id="progreso" class="hide"><p class="muted">Próximamente: gráficos y tendencias.</p></div>
-          <div class="center" style="margin-top:14px">
-            <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Lateral información -->
-      <aside class="card" aria-labelledby="aboutTitle" style="align-self:start">
-        <h2 id="aboutTitle">¿Qué es ProteeMVT?</h2>
-        <p class="muted" style="margin-top:6px">Calculadora y diario nutricional para personas activas. Interfaz amable, métricas claras y sin fricción.</p>
-      </aside>
+    <section id="dashboard" class="hide" aria-label="Panel de usuario" style="margin-top:6px">
+      <h2>Bienvenido 👋</h2>
+      <nav class="tabs" aria-label="Secciones del panel">
+        <button type="button" onclick="showSection('resumen')">🏠 Resumen</button>
+        <button type="button" onclick="showSection('comidas')">🍽️ Comidas</button>
+        <button type="button" onclick="showSection('progreso')">📊 Progreso</button>
+      </nav>
+      <div id="resumen"><p class="muted">Aquí verás tu progreso y tus metas del día.</p></div>
+      <div id="comidas" class="hide"><p class="muted">Próximamente: registro y búsqueda de alimentos.</p></div>
+      <div id="progreso" class="hide"><p class="muted">Próximamente: gráficos y tendencias.</p></div>
+      <div class="center" style="margin-top:14px">
+        <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
+      </div>
     </section>
 
-    <!-- ===== Bloques de valor (movidos al final) ===== -->
+    <!-- Beneficios al final (opcional, puedes quitar si no los quieres) -->
     <section id="beneficios-final" class="grid-3" aria-label="Beneficios principales" style="margin-top:28px">
       <article class="feat-card"><h3>🎯 Objetivo claro</h3><p>Define metas y la app traduce a acciones simples: proteínas, calorías y hábitos.</p></article>
       <article class="feat-card"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes en segundos y consulta valores clave sin perder el foco.</p></article>
@@ -234,26 +160,78 @@
     </section>
   </main>
 
-  <!-- ===== Modal de Perfil ===== -->
+  <!-- MODALES: Signup / Login -->
+  <div id="signupModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+      <div class="card" style="max-width:460px;width:100%">
+        <h2 id="signupTitle">Crear cuenta</h2>
+        <div class="stack-12" style="margin-top:8px">
+          <div>
+            <label for="suEmail">Correo</label>
+            <input id="suEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+          </div>
+          <div>
+            <label for="suPass">Contraseña</label>
+            <input id="suPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+          </div>
+        </div>
+        <p id="suMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
+        <div class="row" style="margin-top:12px;justify-content:flex-end">
+          <button id="btnCloseSignup" class="btn" type="button">Cancelar</button>
+          <button id="btnDoSignup" class="btn btn-primary" type="button">Crear cuenta</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="loginModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+      <div class="card" style="max-width:460px;width:100%">
+        <h2 id="loginTitle">Iniciar sesión</h2>
+        <div class="stack-12" style="margin-top:8px">
+          <div>
+            <label for="liEmail">Correo</label>
+            <input id="liEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+          </div>
+          <div>
+            <label for="liPass">Contraseña</label>
+            <input id="liPass" type="password" placeholder="Tu contraseña" autocomplete="current-password" />
+          </div>
+        </div>
+        <p id="liMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
+        <div class="row" style="margin-top:12px;justify-content:space-between">
+          <button id="btnForgot" class="btn btn-soft" type="button">Olvidé mi contraseña</button>
+          <div>
+            <button id="btnCloseLogin" class="btn" type="button">Cancelar</button>
+            <button id="btnDoLogin" class="btn btn-primary" type="button">Entrar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Perfil -->
   <div id="profileModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-    <section class="card" style="max-width:460px;width:100%;position:relative">
-      <h2 id="profileTitle">Tu perfil</h2>
-      <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
-      <div class="stack-12" style="margin-top:10px">
-        <div>
-          <label for="profEmail">Correo</label>
-          <input id="profEmail" type="email" disabled />
+    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
+      <div class="card" style="max-width:460px;width:100%">
+        <h2 id="profileTitle">Tu perfil</h2>
+        <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
+        <div class="stack-12" style="margin-top:10px">
+          <div>
+            <label for="profEmail">Correo</label>
+            <input id="profEmail" type="email" disabled />
+          </div>
+          <div>
+            <label for="profName">Nombre visible</label>
+            <input id="profName" type="text" placeholder="Tu nombre" />
+          </div>
         </div>
-        <div>
-          <label for="profName">Nombre visible</label>
-          <input id="profName" type="text" placeholder="Tu nombre" />
+        <div class="row" style="margin-top:12px;justify-content:flex-end">
+          <button id="btnCloseProfile" class="btn" type="button">Cerrar</button>
+          <button id="btnSaveProfile" class="btn btn-primary" type="button">Guardar</button>
         </div>
+        <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
       </div>
-      <div class="row" style="margin-top:12px;justify-content:flex-end">
-        <button id="btnCloseProfile" class="btn" type="button">Cerrar</button>
-        <button id="btnSaveProfile" class="btn btn-primary" type="button" style="width:auto">Guardar</button>
-      </div>
-      <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
     </section>
   </div>
 
@@ -261,149 +239,90 @@
     <p class="muted">© <span id="year"></span> ProteeMVT. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const { createClient } = supabase;
 
-    /* ====== SUPABASE ====== */
     const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhmaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    /* ====== Utils ====== */
     const $ = (id)=>document.getElementById(id);
     const show = (id)=>$(id).classList.remove('hide');
     const hide = (id)=>$(id).classList.add('hide');
 
     function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>$(id).classList.toggle("hide", id!==sec)); }
 
-    function setLoading(btn, is){ if(!btn) return; if(is){ btn.setAttribute('disabled','true'); btn.style.opacity=.7 } else { btn.removeAttribute('disabled'); btn.style.opacity=1 } }
+    // ====== Modales helpers
+    function openModal(id){ show(id); document.body.style.overflow='hidden'; }
+    function closeModal(id){ hide(id); document.body.style.overflow=''; }
 
-    /* ====== Auth Elements ====== */
-    const emailInput = $("emailInput");
-    const passInput  = $("passInput");
-    const msg        = $("msg");
-    const signupRow  = $("signupRow");
-    const btnSignupNow = $("btnSignupNow");
-
-    const recSec     = $("recovery-section");
-    const recMsg     = $("recMsg");
-    const newPassInput = $("newPassInput");
-
-    /* ====== Perfil Elements ====== */
-    const modal = $("profileModal");
-    const profEmail = $("profEmail");
-    const profName  = $("profName");
-    const profMsg   = $("profMsg");
-
-    /* ====== Perfil API ====== */
+    // ====== Perfil API
     async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
     async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.error(error); return null; } return data||null; }
-    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.error(error); prof = await getProfile(user.id); openProfileModal(prof, user); } return prof; }
+    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.error(error); prof = await getProfile(user.id); openModal('profileModal'); } return prof; }
 
-    /* ====== UI States ====== */
     function setLoggedUI({ user, profile }){
-      show("topbar"); hide("hero-guest"); show("hero-user");
-      hide("auth-section"); hide("recovery-section"); show("dashboard");
-      const name = (profile?.display_name || user.email || '').split('@')[0];
-      $("helloName").textContent = `¡Hola, ${name}!`;
+      show("topbar"); // header visible
+      hide("hero-guest");
+      show("dashboard");
       $("userBadge").textContent = user.email;
     }
-    function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("hero-user"); show("auth-section"); hide("recovery-section"); hide("dashboard"); }
+    function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("dashboard"); }
 
     async function afterLoginShowApp(){ const user = await getUser(); if(!user){ setGuestUI(); return; } const profile = await ensureProfile(); setLoggedUI({ user, profile }); }
 
-    /* ====== Acciones Auth ====== */
-    $("btnEmail").onclick = async (e)=>{
-      e.preventDefault();
-      msg.textContent=""; signupRow.classList.add('hide');
-      const email = (emailInput.value||"").trim();
-      const password = (passInput.value||"").trim();
+    // ====== Botones acceso
+    $("btnOpenSignup").onclick = ()=> openModal('signupModal');
+    $("btnOpenLogin").onclick = ()=> openModal('loginModal');
 
-      // Validaciones simples
-      const emailOk = /.+@.+\..+/.test(email);
-      if(!emailOk){ msg.textContent = "Escribe un correo válido."; return; }
-      if((password||"").length < 6){ msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
-
-      setLoading($("btnEmail"), true);
-
-      // 1) Intentar login
-      const { data:loginData, error:loginError } = await sb.auth.signInWithPassword({ email, password });
-      if(!loginError){
-        msg.textContent = "Sesión iniciada ✅";
-        setLoading($("btnEmail"), false);
-        await afterLoginShowApp();
-        return;
-      }
-
-      // 2) Si no se pudo: ofrecer crear cuenta explícitamente
-      setLoading($("btnEmail"), false);
-      msg.textContent = "No encontramos una cuenta con esas credenciales.";
-      signupRow.classList.remove('hide');
+    // ====== Signup
+    $("btnCloseSignup").onclick = ()=> closeModal('signupModal');
+    $("btnDoSignup").onclick = async ()=>{
+      const email = ( $("suEmail").value || '' ).trim();
+      const password = ( $("suPass").value || '' ).trim();
+      const msg = $("suMsg"); msg.textContent='';
+      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
+      if(password.length < 6){ msg.textContent='La contraseña debe tener al menos 6 caracteres.'; return; }
+      const { data, error } = await sb.auth.signUp({ email, password });
+      if(error){ msg.textContent = 'Error: '+error.message; return; }
+      if(data?.user && !data.session){ msg.textContent='Cuenta creada. Revisa tu correo para confirmar.'; }
+      else{ msg.textContent='Cuenta creada y sesión iniciada ✅'; closeModal('signupModal'); await afterLoginShowApp(); }
     };
 
-    // Crear cuenta sólo si el usuario lo confirma
-    btnSignupNow.onclick = async ()=>{
-      msg.textContent = "";
-      const email = (emailInput.value||"").trim();
-      const password = (passInput.value||"").trim();
-      setLoading(btnSignupNow, true);
-      const { data:signupData, error:signupError } = await sb.auth.signUp({ email, password });
-      setLoading(btnSignupNow, false);
-      if(signupError){ msg.textContent = "Error al crear la cuenta: "+signupError.message; return; }
-      if(signupData?.user && !signupData.session){
-        msg.textContent = "Cuenta creada. Revisa tu correo para confirmar y luego inicia sesión.";
-      }else{
-        msg.textContent = "Cuenta creada y sesión iniciada ✅";
-        await afterLoginShowApp();
-      }
+    // ====== Login
+    $("btnCloseLogin").onclick = ()=> closeModal('loginModal');
+    $("btnDoLogin").onclick = async ()=>{
+      const email = ( $("liEmail").value || '' ).trim();
+      const password = ( $("liPass").value || '' ).trim();
+      const msg = $("liMsg"); msg.textContent='';
+      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
+      if(!password){ msg.textContent='Ingresa tu contraseña.'; return; }
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      if(error){ msg.textContent = 'No pudimos iniciar sesión: '+error.message; return; }
+      msg.textContent='Sesión iniciada ✅';
+      closeModal('loginModal');
+      await afterLoginShowApp();
     };
 
-    $("btnResend").onclick = async (e)=>{
-      e.preventDefault(); msg.textContent=""; setLoading($("btnResend"), true);
-      const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo y pulsa Reenviar."; setLoading($("btnResend"), false); return; }
-      const { error } = await sb.auth.resend({ type:"signup", email });
-      setLoading($("btnResend"), false);
-      msg.textContent = error ? ("No se pudo reenviar: "+error.message) : "Te reenviamos el email de verificación ✅";
-    };
-
-    $("btnForgot").onclick = async (e)=>{
-      e.preventDefault(); msg.textContent=""; setLoading($("btnForgot"), true);
-      const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo primero."; setLoading($("btnForgot"), false); return; }
+    // ====== Forgot password
+    $("btnForgot").onclick = async ()=>{
+      const email = ( $("liEmail").value || '' ).trim();
+      const msg = $("liMsg"); msg.textContent='';
+      if(!/.+@.+\..+/.test(email)){ msg.textContent='Escribe el correo que usaste para registrarte.'; return; }
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
-      setLoading($("btnForgot"), false);
-      msg.textContent = error ? ("No se pudo enviar: "+error.message) : "Te enviamos un enlace para restablecer tu contraseña ✅";
+      msg.textContent = error ? ('No se pudo enviar: '+error.message) : 'Te enviamos un enlace para restablecer tu contraseña ✅';
     };
 
     async function logout(){ await sb.auth.signOut(); setGuestUI(); }
     $("btnHeaderLogout").onclick = logout;
 
-    /* ====== Modal ====== */
-    let lastFocused = null;
-    function openProfileModal(profile, user){ lastFocused = document.activeElement; profEmail.value = user.email || ""; profName.value  = profile?.display_name || ""; profMsg.textContent = ""; $("profileModal").classList.remove("hide"); document.body.classList.add('modal-open'); setTimeout(()=>profName.focus(), 0); }
-    function closeProfileModal(){ $("profileModal").classList.add("hide"); document.body.classList.remove('modal-open'); if(lastFocused) lastFocused.focus(); }
-    $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); openProfileModal(profile, user); };
-    $("btnCloseProfile").onclick = closeProfileModal;
+    // ====== Perfil
+    $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); $("profEmail").value = user.email || ''; $("profName").value = profile?.display_name || ''; openModal('profileModal'); };
+    $("btnCloseProfile").onclick = ()=> closeModal('profileModal');
+    $("btnSaveProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const display_name = ( $("profName").value || '' ).trim() || user.email; const { error } = await sb.from('profiles').upsert({ id:user.id, display_name }); $("profMsg").textContent = error ? ('Error: '+error.message) : 'Guardado ✅'; };
 
-    $("btnSaveProfile").onclick = async ()=>{
-      profMsg.textContent=""; setLoading($("btnSaveProfile"), true);
-      const user = await getUser(); if(!user){ setLoading($("btnSaveProfile"), false); return; }
-      const display_name = (profName.value||"").trim() || user.email;
-      const { error } = await sb.from('profiles').upsert({ id:user.id, display_name });
-      setLoading($("btnSaveProfile"), false);
-      if(error){ profMsg.textContent="Error: "+error.message; return; }
-      profMsg.textContent="Guardado ✅";
-      $("helloName").textContent = `¡Hola, ${(display_name||'').split('@')[0]}!`;
-      setTimeout(closeProfileModal, 650);
-    };
-
-    window.addEventListener('keydown', (e)=>{ const m = $("profileModal"); if(!m.classList.contains('hide') && e.key === 'Escape'){ closeProfileModal(); } });
-    $("profileModal").addEventListener('click', (e)=>{ if(e.target.id === 'profileModal'){ closeProfileModal(); } });
-
-    /* ====== Init ====== */
+    // ====== Restaurar sesión desde enlaces de email
     (async ()=>{
       $("year").textContent = new Date().getFullYear();
       const hash = window.location.hash || "";
@@ -412,11 +331,13 @@
         await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
         history.replaceState({}, document.title, window.location.pathname);
       }
-      if(hash.includes("type=recovery")){ hide("auth-section"); show("recovery-section"); return; }
+      if(hash.includes("type=recovery")){
+        // Si viene desde email de recuperación, abrir modal de login para que establezca nueva pass si el flujo lo pide
+        openModal('loginModal');
+      }
       const { data:{ user } } = await sb.auth.getUser();
       if(user) await afterLoginShowApp(); else setGuestUI();
     })();
   </script>
 </body>
 </html>
-
