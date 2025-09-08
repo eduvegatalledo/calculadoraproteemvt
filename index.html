@@ -4,126 +4,113 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ProteeMVT — Nutrición simple, progreso real</title>
-  <meta name="description" content="ProteeMVT: calcula tus macros, registra comidas y sigue tu progreso con una interfaz simple y motivadora." />
+  <meta name="description" content="ProteeMVT: calcula tus macros, registra comidas y sigue tu progreso con una experiencia visual agradable y enfocada." />
   <meta name="color-scheme" content="light" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#12d59a" />
 
-  <!-- Open Graph / Social -->
+  <!-- Social -->
   <meta property="og:title" content="ProteeMVT — Nutrición simple, progreso real" />
-  <meta property="og:description" content="Calcula tus macros, registra lo que comes y sigue tu avance cada día." />
+  <meta property="og:description" content="Calcula macros, registra comidas y mira tu progreso con una UI clara y motivadora." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/og-preview.png" />
   <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Tipografías: equilibradas, legibles y modernas -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
+  <!-- Tipografías: display + legible -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Sora:wght@400;600;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ========= Design System ========= */
+    /* ========= Identidad Visual: Clean Fresh ========= */
     :root{
-      --brand:#2e8b57;        /* Green */
-      --brand-2:#1f7246;      /* Darker */
-      --accent:#21b477;       /* Accent */
-      --ink:#102019;          /* Primary text */
-      --muted:#5b6f66;        /* Muted text */
-      --bg:#f7faf8;           /* App background */
-      --card:#ffffff;         /* Cards / surfaces */
-      --line:#e8efe9;         /* Hairline */
-      --ring:rgba(46,139,87,.18);
-      --shadow: 0 10px 25px rgba(16,32,25,.06), 0 2px 8px rgba(16,32,25,.04);
-      --radius: 16px;
+      --emerald:#10b981;   /* primario */
+      --aqua:#32e6ff;      /* acento */
+      --ink:#0b1a20;       /* texto principal */
+      --ink-2:#355059;     /* texto secundario */
+      --paper:#f8fffb;     /* fondo uniforme */
+      --glass: #ffffff;    /* superficies */
+      --stroke: rgba(12,130,94,.14);
+      --ring: rgba(18,213,154,.22);
+      --shadow: 0 14px 34px rgba(5,28,22,.08), 0 4px 14px rgba(5,28,22,.06);
+      --radius-xl: 22px; --radius:16px; --radius-sm:12px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
-      font-family:'Inter','Nunito',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      font-family:'Plus Jakarta Sans','Sora',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
       color:var(--ink);
-      background:
-        /* textura sutil con SVG embebido */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23eaf4ef' fill-opacity='0.6'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3Ccircle cx='62' cy='42' r='1'/%3E%3Ccircle cx='98' cy='88' r='1'/%3E%3Ccircle cx='22' cy='78' r='1'/%3E%3C/g%3E%3C/svg%3E") repeat,
-        radial-gradient(1200px 500px at 50% -200px, rgba(46,139,87,.10), transparent 60%),
-        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      background: var(--paper); /* Fondo más uniforme */
       min-height:100dvh;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    @media (prefers-reduced-motion:no-preference){ :root{ scroll-behavior:smooth; } }
-    body.modal-open{ overflow:hidden; }
 
-    /* ========= Topbar ========= */
-    header#topbar{
-      position:sticky; top:0; z-index:30;
-      background:rgba(255,255,255,.86);
-      backdrop-filter:saturate(140%) blur(8px);
-      border-bottom:1px solid var(--line);
-    }
-    .tb{ max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px; }
-    .brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--brand-2)}
-    .brand-dot{width:10px;height:10px;border-radius:999px;background:linear-gradient(180deg,var(--brand),var(--accent))}
+    /* ======= Contenedores ======= */
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 20px 72px; }
+
+    /* ======= Topbar ======= */
+    header#topbar{ position:sticky; top:0; z-index:30; }
+    .tb{ max-width:1200px; margin:10px auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--glass); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow); }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:#0a3027; letter-spacing:.2px}
+    .brand-mark{ width:28px; height:28px; border-radius:9px; background: linear-gradient(135deg,var(--emerald), var(--aqua)); box-shadow:0 6px 18px rgba(16,185,129,.28); }
     .tb-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .badge-email{color:var(--muted);font-size:13px}
+    .badge-email{color:#1c3b33;font-size:13px; opacity:.85}
 
-    /* ========= Buttons & Inputs ========= */
-    .btn{ display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;cursor:pointer;transition:transform .06s ease, box-shadow .18s ease, filter .18s ease; }
+    /* ======= Botones & Inputs ======= */
+    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:14px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease; }
     .btn:active{ transform:translateY(1px) }
+    .btn-primary{ background:linear-gradient(135deg,var(--emerald), #08c98f); color:#04241b; border-color:transparent; box-shadow: 0 10px 22px rgba(16,185,129,.24); }
+    .btn-primary:hover{ filter:brightness(1.03) }
+    .btn-soft{ background:#f3fbf8; border-color:#e3f3ed }
+    .btn-ghost{ background:transparent; border-color:transparent }
     .btn[disabled]{ opacity:.6; cursor:not-allowed }
-    .btn-primary{ border-color:transparent;background:var(--brand);color:#fff; }
-    .btn-primary:hover{ filter:brightness(.98) }
-    .btn-soft{ background:#f3f9f5;border-color:#dfe9e4 }
-    .btn-ghost{ background:transparent;border-color:transparent }
-    .btn.is-loading{ position:relative; pointer-events:none }
-    .btn.is-loading::after{ content:""; width:18px;height:18px; border:2px solid rgba(255,255,255,.7); border-top-color:transparent; border-radius:50%; display:inline-block; animation:spin .8s linear infinite }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
 
-    label{ font-weight:700;font-size:13px; display:inline-block; margin-bottom:6px }
-    input{ width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:15px;outline:none;transition:box-shadow .18s,border .18s,transform .03s; }
-    input:focus{ border-color:var(--brand); box-shadow:0 0 0 3px var(--ring); }
+    label{ font-weight:700; font-size:13px; display:inline-block; margin-bottom:6px }
+    input{ width:100%; padding:14px 14px; border-radius:14px; border:1px solid #e5efea; background:#fff; font-size:15px; outline:none; transition:box-shadow .18s,border .18s,transform .03s; }
+    input:focus{ border-color:var(--emerald); box-shadow:0 0 0 4px var(--ring); }
 
-    /* ========= Layout / Cards ========= */
-    .wrap{ max-width:1080px; margin:0 auto; padding:0 16px 56px; }
-    .card{ background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow); padding:18px; }
+    /* ======= Hero ======= */
+    .hero{ position:relative; color:#0a2a22; }
+    .hero-pad{ padding: clamp(36px, 6.4vw, 96px) 16px 28px; display:grid; grid-template-columns: 1fr; gap:10px }
+    .display{ margin:10px 0 8px; line-height:1.04; font-weight:800; font-family:'Sora','Plus Jakarta Sans',sans-serif; font-size: clamp(34px, 6vw, 64px); color:#0c3e33; letter-spacing:.2px }
+    .lead{ margin:8px 0 0; max-width:760px; font-size: clamp(15px, 2.1vw, 19px); color:#345b53; opacity:.98 }
 
-    /* ========= Hero (Guest / User) ========= */
-    .hero{ position:relative;overflow:hidden;color:#fff;text-align:center;background: linear-gradient(90deg, var(--brand-2), var(--brand)); }
-    .hero-pad{ padding: clamp(34px, 6.8vw, 84px) 16px 28px; }
-    .badge{ display:inline-block;padding:7px 10px;border-radius:999px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.20);font-size:12px }
-    h1.display{ margin:14px auto 8px;line-height:1.05;font-weight:900;font-size: clamp(28px, 5.2vw, 54px);text-shadow:0 8px 30px rgba(0,0,0,.18) }
-    .lead{ margin:8px auto 0; max-width:860px; font-size: clamp(14px, 2.4vw, 18px); opacity:.95 }
+    /* CTA alineada a la derecha en desktop */
+    .hero-cta{ display:flex; justify-content:flex-end; }
+    .hero-cta .btn{ padding:10px 14px; font-weight:800 }
+    .hero-cta .btn-primary{ font-size:14px } /* un poco más pequeña */
 
-    /* ========= Feature blocks ========= */
-    .features{ display:grid; gap:16px; margin-top:-24px }
-    @media (min-width:900px){ .features{ grid-template-columns:repeat(3,1fr) } }
-    .feat{ border-radius:14px; background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); padding:16px }
-    .feat h3{ margin:0 0 6px; color:var(--brand); font-size:18px }
-    .feat p{ margin:0; color:var(--muted); font-size:14px }
+    @media (min-width:900px){ .hero-pad{ grid-template-columns: 1.2fr .8fr; align-items:end } }
 
-    /* ========= Auth / Grid ========= */
+    /* ======= Tarjetas / info ======= */
     .grid-2{ display:grid; gap:18px; grid-template-columns:1fr }
     @media (min-width:980px){ .grid-2{ grid-template-columns:1.1fr .9fr } }
-    h2{ margin:0 0 8px; font-size:22px; color:var(--brand-2) }
-    .muted{ color:var(--muted); font-size:13px }
+    .card{ position:relative; background:var(--glass); border:1px solid var(--stroke); border-radius:var(--radius-xl); box-shadow:var(--shadow); padding:20px; }
+    h2{ margin:0 0 10px; font-size:24px; color:#0e3e34; letter-spacing:.2px }
+    .muted{ color:#40675e; font-size:13px }
     .hide{ display:none !important }
     .center{ text-align:center }
-
-    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
-    nav.tabs button{ border:none; background:#eef7f1; color:#175c3a; padding:8px 12px; border-radius:999px; font-weight:800; cursor:pointer }
-
-    /* ========= Modal ========= */
-    #profileModal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(16,32,25,.25); padding:16px; z-index:50 }
-    @media (prefers-reduced-motion:no-preference){
-      #profileModal .card{ animation:pop .16s ease-out }
-      @keyframes pop{ from{transform:translateY(8px) scale(.98); opacity:0} to{transform:none; opacity:1} }
-    }
-
-    .modal-card{ max-width:460px;width:100%;position:relative }
-
-    /* ========= Footer / helper spacing ========= */
-    .sp16{ height:16px } .sp24{ height:24px }
-    .visually-hidden{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px, 1px, 1px, 1px); white-space:nowrap; }
     .stack-10{ display:grid; gap:10px }
     .stack-12{ display:grid; gap:12px }
     .row{ display:flex; gap:10px; flex-wrap:wrap }
+
+    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
+    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 14px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8 }
+
+    /* ======= Sección Beneficios al final ======= */
+    .grid-3{ display:grid; gap:18px; grid-template-columns:1fr }
+    @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr) } }
+    .feat-card{ background:#ffffff; border:1px solid #e6f1ec; border-radius:18px; padding:18px; box-shadow:var(--shadow) }
+    .feat-card h3{ margin:0 0 8px; font-size:18px; color:#0a372d }
+    .feat-card p{ margin:0; color:#335a52; font-size:14px }
+
+    /* ======= Modal ======= */
+    #profileModal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22); padding:16px; z-index:50 }
+    @media (prefers-reduced-motion:no-preference){
+      #profileModal .card{ animation:pop .18s ease-out }
+      @keyframes pop{ from{transform:translateY(8px) scale(.98); opacity:0} to{transform:none; opacity:1} }
+    }
+
+    body.modal-open{ overflow:hidden }
+    footer{ margin-top:20px }
   </style>
 </head>
 <body>
@@ -131,7 +118,7 @@
   <!-- ===== Topbar (solo usuarios) ===== -->
   <header id="topbar" class="hide" role="banner">
     <div class="tb">
-      <div class="brand" aria-label="ProteeMVT"><span class="brand-dot" aria-hidden="true"></span> ProteeMVT</div>
+      <div class="brand" aria-label="ProteeMVT"><span class="brand-mark" aria-hidden="true"></span> ProteeMVT</div>
       <div class="tb-actions">
         <span id="userBadge" class="badge-email" aria-live="polite"></span>
         <button id="btnProfile" class="btn btn-soft" type="button" aria-haspopup="dialog" aria-controls="profileModal">Tu perfil</button>
@@ -140,58 +127,53 @@
     </div>
   </header>
 
-  <!-- ===== Hero Invitado ===== -->
+  <!-- ===== Hero Invitado/Usuario (con CTA a la derecha) ===== -->
   <section id="hero-guest" class="hero" aria-labelledby="heroGuestTitle">
     <div class="hero-pad">
-      <span class="badge">protee mvt</span>
-      <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
-      <p class="lead">Calcula tus macros, registra lo que comes y sigue tu avance. Interfaz clara, amable y enfocada en ayudarte todos los días.</p>
+      <div>
+        <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
+        <p class="lead">Calcula tus macros, registra lo que comes y sigue tu avance. Interfaz clara y agradable para usar todos los días.</p>
+      </div>
+      <div class="hero-cta">
+        <a href="#auth" class="btn btn-primary" aria-label="Ir a la sección para acceder a tu cuenta">Acceder a tu cuenta</a>
+      </div>
     </div>
   </section>
 
-  <!-- ===== Hero Usuario ===== -->
-  <section id="hero-user" class="hero hide" style="background:linear-gradient(90deg,var(--brand-2),#1a6a42)" aria-labelledby="heroUserTitle">
+  <section id="hero-user" class="hero hide" aria-labelledby="heroUserTitle">
     <div class="hero-pad">
-      <span class="badge">tu día, optimizado</span>
-      <h1 id="heroUserTitle" class="display"><span id="helloName">¡Bienvenido!</span></h1>
-      <p class="lead">Revisa tu resumen, registra comidas y mira tus tendencias.</p>
+      <div>
+        <h1 id="heroUserTitle" class="display"><span id="helloName">¡Bienvenido!</span></h1>
+        <p class="lead">Revisa tu resumen, registra comidas y mira tus tendencias.</p>
+      </div>
+      <div class="hero-cta">
+        <a href="#dashboard" class="btn btn-primary">Ir al panel</a>
+      </div>
     </div>
   </section>
 
   <main class="wrap" id="main">
 
-    <!-- Bloques de valor -->
-    <section class="features" aria-label="Beneficios principales">
-      <article class="feat"><h3>🎯 Objetivo claro</h3><p>Define tus metas y deja que la app traduzca todo a acciones simples: proteínas, calorías y hábitos.</p></article>
-      <article class="feat"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes y consulta valores. Cada día suma para tu progreso.</p></article>
-      <article class="feat"><h3>📈 Tu progreso</h3><p>Métricas que sí importan, con una vista limpia y motivadora.</p></article>
-    </section>
-
-    <div class="sp16" aria-hidden="true"></div>
-
-    <!-- Auth + About -->
+    <!-- Acceso + Lateral -->
     <section class="grid-2" aria-label="Acceso y descripción">
       <!-- Auth / Dashboard -->
-      <section class="card" aria-labelledby="authTitle">
+      <section id="auth" class="card" aria-labelledby="authTitle">
+        <h2 id="authTitle">Accede a tu cuenta</h2>
+        <p class="muted">Usa tu correo y contraseña. Si no tienes cuenta, podrás crearla en un paso.</p>
 
         <!-- INVITADO: formulario -->
-        <div id="auth-section" class="stack-12">
-          <h2 id="authTitle">Accede a tu cuenta</h2>
-          <p class="muted">Crea tu cuenta con correo y contraseña. Luego podrás guardar tus metas y comidas.</p>
-
-          <div class="stack-12" style="margin-top:10px">
-            <div>
-              <label for="emailInput">Correo</label>
-              <input id="emailInput" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
-            </div>
-            <div>
-              <label for="passInput">Contraseña</label>
-              <input id="passInput" type="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
-            </div>
+        <div id="auth-section" class="stack-12" style="margin-top:10px">
+          <div>
+            <label for="emailInput">Correo</label>
+            <input id="emailInput" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+          </div>
+          <div>
+            <label for="passInput">Contraseña</label>
+            <input id="passInput" type="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
           </div>
 
           <div class="stack-10" style="margin-top:12px">
-            <button id="btnEmail" class="btn btn-primary" type="button">Ingresar / Crear cuenta</button>
+            <button id="btnEmail" class="btn btn-primary" type="button">Acceder</button>
             <div class="row">
               <button id="btnResend" class="btn btn-soft" type="button" style="flex:1">Reenviar verificación</button>
               <button id="btnForgot" class="btn btn-soft" type="button" style="flex:1">Olvidé mi contraseña</button>
@@ -199,6 +181,11 @@
           </div>
 
           <p id="msg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
+
+          <!-- Sugerencia de crear cuenta cuando el login falla -->
+          <div id="signupRow" class="hide" style="margin-top:6px">
+            <button id="btnSignupNow" class="btn btn-soft" type="button">Crear cuenta con este correo</button>
+          </div>
         </div>
 
         <!-- RECOVERY: nueva contraseña -->
@@ -211,13 +198,12 @@
               <input id="newPassInput" type="password" placeholder="Nueva contraseña" autocomplete="new-password" />
             </div>
           </div>
-          <div class="sp16" aria-hidden="true"></div>
-          <button id="btnSetNew" class="btn btn-primary" type="button" style="width:auto">Guardar nueva contraseña</button>
+          <button id="btnSetNew" class="btn btn-primary" type="button" style="width:auto; margin-top:10px">Guardar nueva contraseña</button>
           <p id="recMsg" class="muted" style="margin-top:10px" role="status" aria-live="polite"></p>
         </div>
 
         <!-- USUARIO: dashboard -->
-        <div id="dashboard" class="hide" aria-label="Panel de usuario">
+        <div id="dashboard" class="hide" aria-label="Panel de usuario" style="margin-top:6px">
           <h2>Bienvenido 👋</h2>
           <nav class="tabs" aria-label="Secciones del panel">
             <button type="button" onclick="showSection('resumen')">🏠 Resumen</button>
@@ -231,22 +217,26 @@
             <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
           </div>
         </div>
-
       </section>
 
       <!-- Lateral información -->
-      <aside class="card" style="align-self:start" aria-labelledby="aboutTitle">
+      <aside class="card" aria-labelledby="aboutTitle" style="align-self:start">
         <h2 id="aboutTitle">¿Qué es ProteeMVT?</h2>
-        <p class="muted" style="margin-top:6px">Una calculadora y diario nutricional para personas activas. Interfaz amable, métricas claras y sin fricción.</p>
-        <div class="feat" style="margin-top:10px"><h3>🧭 Filosofía</h3><p>Menos ruido, más foco en lo que suma cada día.</p></div>
-        <div class="feat" style="margin-top:10px"><h3>🔒 Privacidad</h3><p>Tus datos son tuyos. Autenticación segura con Supabase.</p></div>
+        <p class="muted" style="margin-top:6px">Calculadora y diario nutricional para personas activas. Interfaz amable, métricas claras y sin fricción.</p>
       </aside>
+    </section>
+
+    <!-- ===== Bloques de valor (movidos al final) ===== -->
+    <section id="beneficios-final" class="grid-3" aria-label="Beneficios principales" style="margin-top:28px">
+      <article class="feat-card"><h3>🎯 Objetivo claro</h3><p>Define metas y la app traduce a acciones simples: proteínas, calorías y hábitos.</p></article>
+      <article class="feat-card"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes en segundos y consulta valores clave sin perder el foco.</p></article>
+      <article class="feat-card"><h3>📈 Progreso motivador</h3><p>Gráficos limpios con métricas que importan para sostener el hábito.</p></article>
     </section>
   </main>
 
   <!-- ===== Modal de Perfil ===== -->
   <div id="profileModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-    <div class="card modal-card">
+    <section class="card" style="max-width:460px;width:100%;position:relative">
       <h2 id="profileTitle">Tu perfil</h2>
       <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
       <div class="stack-12" style="margin-top:10px">
@@ -264,7 +254,7 @@
         <button id="btnSaveProfile" class="btn btn-primary" type="button" style="width:auto">Guardar</button>
       </div>
       <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
-    </div>
+    </section>
   </div>
 
   <footer class="wrap" aria-label="Información legal">
@@ -276,29 +266,26 @@
   <script>
     const { createClient } = supabase;
 
-    /* ====== TU PROYECTO SUPABASE ====== */
+    /* ====== SUPABASE ====== */
     const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhmaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    /* ====== Helpers UI ====== */
+    /* ====== Utils ====== */
     const $ = (id)=>document.getElementById(id);
     const show = (id)=>$(id).classList.remove('hide');
     const hide = (id)=>$(id).classList.add('hide');
 
-    function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>{ $(id).classList.toggle("hide", id!==sec); }); }
+    function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>$(id).classList.toggle("hide", id!==sec)); }
 
-    // Botón loading helper
-    function setLoading(btn, loading){
-      if(!btn) return;
-      if(loading){ btn.classList.add('is-loading'); btn.setAttribute('disabled','true'); }
-      else{ btn.classList.remove('is-loading'); btn.removeAttribute('disabled'); }
-    }
+    function setLoading(btn, is){ if(!btn) return; if(is){ btn.setAttribute('disabled','true'); btn.style.opacity=.7 } else { btn.removeAttribute('disabled'); btn.style.opacity=1 } }
 
     /* ====== Auth Elements ====== */
     const emailInput = $("emailInput");
     const passInput  = $("passInput");
     const msg        = $("msg");
+    const signupRow  = $("signupRow");
+    const btnSignupNow = $("btnSignupNow");
 
     const recSec     = $("recovery-section");
     const recMsg     = $("recMsg");
@@ -310,151 +297,126 @@
     const profName  = $("profName");
     const profMsg   = $("profMsg");
 
-    const btnEmail = $("btnEmail");
-    const btnResend = $("btnResend");
-    const btnForgot = $("btnForgot");
-    const btnSetNew = $("btnSetNew");
-    const btnSaveProfile = $("btnSaveProfile");
-    const btnCloseProfile = $("btnCloseProfile");
-
-    /* ====== API Perfil ====== */
+    /* ====== Perfil API ====== */
     async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
-    async function getProfile(userId){
-      const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
-      if(error){ console.error(error); return null; } return data||null;
-    }
-    async function ensureProfile(){
-      const user = await getUser(); if(!user) return null;
-      let prof = await getProfile(user.id);
-      if(!prof){
-        const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email });
-        if(error) console.error(error);
-        prof = await getProfile(user.id);
-        openProfileModal(prof, user); // onboarding
-      }
-      return prof;
-    }
+    async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.error(error); return null; } return data||null; }
+    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.error(error); prof = await getProfile(user.id); openProfileModal(prof, user); } return prof; }
 
     /* ====== UI States ====== */
     function setLoggedUI({ user, profile }){
       show("topbar"); hide("hero-guest"); show("hero-user");
       hide("auth-section"); hide("recovery-section"); show("dashboard");
-
       const name = (profile?.display_name || user.email || '').split('@')[0];
       $("helloName").textContent = `¡Hola, ${name}!`;
       $("userBadge").textContent = user.email;
     }
-    function setGuestUI(){
-      hide("topbar"); show("hero-guest"); hide("hero-user");
-      show("auth-section"); hide("recovery-section"); hide("dashboard");
-    }
+    function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("hero-user"); show("auth-section"); hide("recovery-section"); hide("dashboard"); }
 
-    async function afterLoginShowApp(){
-      const user = await getUser(); if(!user){ setGuestUI(); return; }
-      const profile = await ensureProfile();
-      setLoggedUI({ user, profile });
-    }
+    async function afterLoginShowApp(){ const user = await getUser(); if(!user){ setGuestUI(); return; } const profile = await ensureProfile(); setLoggedUI({ user, profile }); }
 
-    /* ====== Auth Actions ====== */
-    btnEmail.onclick = async (e)=>{
-      e.preventDefault(); msg.textContent=""; setLoading(btnEmail, true);
+    /* ====== Acciones Auth ====== */
+    $("btnEmail").onclick = async (e)=>{
+      e.preventDefault();
+      msg.textContent=""; signupRow.classList.add('hide');
       const email = (emailInput.value||"").trim();
       const password = (passInput.value||"").trim();
-      if(!email || !password){ msg.textContent="Completa correo y contraseña."; setLoading(btnEmail,false); return; }
 
-      // Intentar login
-      const login = await sb.auth.signInWithPassword({ email, password });
-      if(!login.error){ msg.textContent="Sesión iniciada ✅"; setLoading(btnEmail,false); await afterLoginShowApp(); return; }
+      // Validaciones simples
+      const emailOk = /.+@.+\..+/.test(email);
+      if(!emailOk){ msg.textContent = "Escribe un correo válido."; return; }
+      if((password||"").length < 6){ msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
 
-      // Si no existe, registrar
-      const signup = await sb.auth.signUp({ email, password });
-      setLoading(btnEmail,false);
-      if(signup.error){ msg.textContent="Error: "+signup.error.message; return; }
+      setLoading($("btnEmail"), true);
 
-      if(signup.data?.user && !signup.data.session){
-        msg.textContent="Cuenta creada. Revisa tu correo y confirma para entrar.";
+      // 1) Intentar login
+      const { data:loginData, error:loginError } = await sb.auth.signInWithPassword({ email, password });
+      if(!loginError){
+        msg.textContent = "Sesión iniciada ✅";
+        setLoading($("btnEmail"), false);
+        await afterLoginShowApp();
+        return;
+      }
+
+      // 2) Si no se pudo: ofrecer crear cuenta explícitamente
+      setLoading($("btnEmail"), false);
+      msg.textContent = "No encontramos una cuenta con esas credenciales.";
+      signupRow.classList.remove('hide');
+    };
+
+    // Crear cuenta sólo si el usuario lo confirma
+    btnSignupNow.onclick = async ()=>{
+      msg.textContent = "";
+      const email = (emailInput.value||"").trim();
+      const password = (passInput.value||"").trim();
+      setLoading(btnSignupNow, true);
+      const { data:signupData, error:signupError } = await sb.auth.signUp({ email, password });
+      setLoading(btnSignupNow, false);
+      if(signupError){ msg.textContent = "Error al crear la cuenta: "+signupError.message; return; }
+      if(signupData?.user && !signupData.session){
+        msg.textContent = "Cuenta creada. Revisa tu correo para confirmar y luego inicia sesión.";
       }else{
-        msg.textContent="Cuenta creada y sesión iniciada ✅";
+        msg.textContent = "Cuenta creada y sesión iniciada ✅";
         await afterLoginShowApp();
       }
     };
 
-    btnResend.onclick = async (e)=>{
-      e.preventDefault(); msg.textContent=""; setLoading(btnResend,true);
+    $("btnResend").onclick = async (e)=>{
+      e.preventDefault(); msg.textContent=""; setLoading($("btnResend"), true);
       const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo y pulsa Reenviar."; setLoading(btnResend,false); return; }
+      if(!email){ msg.textContent="Escribe tu correo y pulsa Reenviar."; setLoading($("btnResend"), false); return; }
       const { error } = await sb.auth.resend({ type:"signup", email });
-      setLoading(btnResend,false);
+      setLoading($("btnResend"), false);
       msg.textContent = error ? ("No se pudo reenviar: "+error.message) : "Te reenviamos el email de verificación ✅";
     };
 
-    btnForgot.onclick = async (e)=>{
-      e.preventDefault(); msg.textContent=""; setLoading(btnForgot,true);
+    $("btnForgot").onclick = async (e)=>{
+      e.preventDefault(); msg.textContent=""; setLoading($("btnForgot"), true);
       const email = (emailInput.value||"").trim();
-      if(!email){ msg.textContent="Escribe tu correo primero."; setLoading(btnForgot,false); return; }
+      if(!email){ msg.textContent="Escribe tu correo primero."; setLoading($("btnForgot"), false); return; }
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
-      setLoading(btnForgot,false);
+      setLoading($("btnForgot"), false);
       msg.textContent = error ? ("No se pudo enviar: "+error.message) : "Te enviamos un enlace para restablecer tu contraseña ✅";
     };
 
     async function logout(){ await sb.auth.signOut(); setGuestUI(); }
     $("btnHeaderLogout").onclick = logout;
 
-    /* ====== Modal helpers (accesibilidad) ====== */
+    /* ====== Modal ====== */
     let lastFocused = null;
-    function openProfileModal(profile, user){
-      lastFocused = document.activeElement;
-      profEmail.value = user.email || "";
-      profName.value  = profile?.display_name || "";
-      profMsg.textContent = "";
-      modal.classList.remove("hide");
-      document.body.classList.add('modal-open');
-      // Enfocar al primer campo
-      setTimeout(()=>profName.focus(), 0);
-    }
-    function closeProfileModal(){
-      modal.classList.add("hide");
-      document.body.classList.remove('modal-open');
-      if(lastFocused) lastFocused.focus();
-    }
+    function openProfileModal(profile, user){ lastFocused = document.activeElement; profEmail.value = user.email || ""; profName.value  = profile?.display_name || ""; profMsg.textContent = ""; $("profileModal").classList.remove("hide"); document.body.classList.add('modal-open'); setTimeout(()=>profName.focus(), 0); }
+    function closeProfileModal(){ $("profileModal").classList.add("hide"); document.body.classList.remove('modal-open'); if(lastFocused) lastFocused.focus(); }
     $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); openProfileModal(profile, user); };
-    btnCloseProfile.onclick = closeProfileModal;
+    $("btnCloseProfile").onclick = closeProfileModal;
 
-    // Guardar perfil
-    btnSaveProfile.onclick = async ()=>{
-      profMsg.textContent=""; setLoading(btnSaveProfile,true);
-      const user = await getUser(); if(!user){ setLoading(btnSaveProfile,false); return; }
+    $("btnSaveProfile").onclick = async ()=>{
+      profMsg.textContent=""; setLoading($("btnSaveProfile"), true);
+      const user = await getUser(); if(!user){ setLoading($("btnSaveProfile"), false); return; }
       const display_name = (profName.value||"").trim() || user.email;
       const { error } = await sb.from('profiles').upsert({ id:user.id, display_name });
-      setLoading(btnSaveProfile,false);
+      setLoading($("btnSaveProfile"), false);
       if(error){ profMsg.textContent="Error: "+error.message; return; }
       profMsg.textContent="Guardado ✅";
       $("helloName").textContent = `¡Hola, ${(display_name||'').split('@')[0]}!`;
       setTimeout(closeProfileModal, 650);
     };
 
-    // Accesibilidad: cerrar con ESC y clic fuera
-    window.addEventListener('keydown', (e)=>{ if(!modal.classList.contains('hide') && e.key === 'Escape'){ closeProfileModal(); } });
-    modal.addEventListener('click', (e)=>{ if(e.target === modal){ closeProfileModal(); } });
+    window.addEventListener('keydown', (e)=>{ const m = $("profileModal"); if(!m.classList.contains('hide') && e.key === 'Escape'){ closeProfileModal(); } });
+    $("profileModal").addEventListener('click', (e)=>{ if(e.target.id === 'profileModal'){ closeProfileModal(); } });
 
-    /* ====== Restaurar sesión desde enlaces de email ====== */
+    /* ====== Init ====== */
     (async ()=>{
-      // Año del footer
       $("year").textContent = new Date().getFullYear();
-
       const hash = window.location.hash || "";
       if(hash.includes("access_token") && hash.includes("refresh_token")){
         const p = new URLSearchParams(hash.substring(1));
         await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
         history.replaceState({}, document.title, window.location.pathname);
       }
-      if(hash.includes("type=recovery")){
-        hide("auth-section"); show("recovery-section");
-        return;
-      }
+      if(hash.includes("type=recovery")){ hide("auth-section"); show("recovery-section"); return; }
       const { data:{ user } } = await sb.auth.getUser();
       if(user) await afterLoginShowApp(); else setGuestUI();
     })();
   </script>
 </body>
 </html>
+
