@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ProteeMVT — Nutrición simple, progreso real</title>
-  <meta name="description" content="ProteeMVT: calcula tus macros, registra lo que comes y mide tu avance." />
+  <title>Prouti — Nutrición simple, progreso real</title>
+  <meta name="description" content="Calcula tus macros, registra lo que comes y mide tu avance." />
   <meta name="color-scheme" content="light" />
   <meta name="theme-color" content="#12d59a" />
 
   <!-- Social -->
-  <meta property="og:title" content="ProteeMVT — Nutrición simple, progreso real" />
+  <meta property="og:title" content="Prouti — Nutrición simple, progreso real" />
   <meta property="og:description" content="Calcula tus macros, registra lo que comes y mide tu avance." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/og-preview.png" />
@@ -25,30 +25,42 @@
       --aqua:#32e6ff;      /* acento */
       --ink:#0b1a20;       /* texto principal */
       --ink-2:#355059;     /* texto secundario */
-      --paper:#f8fffb;     /* fondo uniforme */
+      --paper:#f4fff9;     /* fondo */
       --glass:#ffffff;     /* superficies */
       --stroke: rgba(12,130,94,.14);
       --ring: rgba(18,213,154,.22);
       --shadow: 0 14px 34px rgba(5,28,22,.08), 0 4px 14px rgba(5,28,22,.06);
       --radius-xl: 22px; --radius:16px; --radius-sm:12px;
+      --warn:#f59e0b; --danger:#ef4444;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
       font-family:'Rubik Rounded','Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
       color:var(--ink);
-      background: var(--paper);
+      background:
+        /* textura sutil de puntitos */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23e2f7ee' fill-opacity='0.85'%3E%3Ccircle cx='6' cy='6' r='1'/%3E%3Ccircle cx='42' cy='58' r='1'/%3E%3Ccircle cx='96' cy='22' r='1'/%3E%3Ccircle cx='86' cy='100' r='1'/%3E%3Ccircle cx='18' cy='88' r='1'/%3E%3C/g%3E%3C/svg%3E") repeat,
+        linear-gradient(180deg, #ffffff 0%, var(--paper) 100%);
       min-height:100dvh;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
     .wrap{ max-width:1200px; margin:0 auto; padding:0 20px 72px; }
 
-    /* Topbar (solo cuando hay sesión) */
-    header#topbar{ position:sticky; top:0; z-index:30; }
-    .tb{ max-width:1200px; margin:10px auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--glass); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow); }
-    .tb-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .badge-email{color:#1c3b33;font-size:13px; opacity:.85}
+    /* ===== Header fijo (logo + nombre) ===== */
+    header.site{ position:sticky; top:0; z-index:40; background:rgba(255,255,255,.86); backdrop-filter:saturate(140%) blur(8px); border-bottom:1px solid #e9f3ee }
+    .site-inner{ max-width:1200px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px }
+    .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit }
+    .logo{ width:28px; height:28px; border-radius:9px; position:relative; background:
+      conic-gradient(from 210deg, #16d39f, #13c6df, #b4ff63, #16d39f);
+      box-shadow:0 6px 18px rgba(16,185,129,.28);
+    }
+    .logo::after{ content:""; position:absolute; inset:3px; border-radius:7px; background:linear-gradient(180deg,#fff,rgba(255,255,255,.65)); mix-blend-mode:overlay; opacity:.7 }
+    .brand-name{ font-weight:800; letter-spacing:.2px }
+
+    .site-actions{ display:flex; gap:8px; align-items:center }
+    .pill{ display:inline-flex; align-items:center; gap:6px; padding:8px 12px; background:#f1fcf7; border:1px solid #e2f5ee; border-radius:999px; color:#0a3a30; font-weight:700 }
 
     /* Botones & Inputs */
     .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:999px; border:1px solid var(--stroke); background:#ffffff; color:#0f2a23; font-weight:800; cursor:pointer; transition: transform .06s ease, box-shadow .18s ease, filter .18s ease; }
@@ -56,6 +68,7 @@
     .btn-primary{ background:linear-gradient(135deg,#16d39f,#0fb787); color:#04241b; border-color:transparent; box-shadow: 0 12px 26px rgba(16,185,129,.26), inset 0 -2px 0 rgba(0,0,0,.06); }
     .btn-primary:hover{ filter:brightness(1.03) }
     .btn-soft{ background:#f3fbf8; border-color:#e3f3ed }
+    .btn-danger{ background:#ffecec; border-color:#ffd1d1; color:#9f1b1b }
     .btn[disabled]{ opacity:.6; cursor:not-allowed }
 
     label{ font-weight:700; font-size:13px; display:inline-block; margin-bottom:6px; letter-spacing:.2px }
@@ -64,32 +77,28 @@
 
     /* Hero reorganizado: título a la izquierda, acceso a la derecha */
     .hero{ position:relative; color:#0a2a22; }
-    .hero-pad{ padding: clamp(30px, 6vw, 60px) 20px; }
+    .hero-pad{ padding: clamp(26px, 5.6vw, 56px) 20px; }
     .hero-grid{ display:grid; grid-template-columns:1fr; gap:20px }
     @media (min-width:980px){ .hero-grid{ grid-template-columns:1.2fr .8fr } }
 
     .display{ margin:8px 0 6px; line-height:1.02; font-weight:800; font-family:'Poppins','Rubik Rounded',sans-serif; font-size: clamp(38px, 7vw, 76px); color:#0c3e33; letter-spacing:.1px }
     .lead{ margin:10px 0 0; max-width:820px; font-size: clamp(16px, 2.2vw, 20px); color:#2f5b52; opacity:.98 }
-    .subbrand{ margin:6px 0 2px; font-family:'Poppins','Rubik Rounded',sans-serif; color:#1c433a; opacity:.9 }
 
-    /* Card genérico */
+    /* Cards */
     .card{ position:relative; background:var(--glass); border:1px solid var(--stroke); border-radius:var(--radius-xl); box-shadow:var(--shadow); padding:20px; }
 
-    /* Acceso pulcro: sólo dos botones */
+    /* Acceso pulcro: dos botones */
     .access-card h2{ margin:0 0 10px; font-size:22px; color:#0e3e34 }
     .access-card .muted{ color:#40675e; font-size:13px; margin:0 0 10px }
 
-    /* Tabs / dashboard */
-    nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px }
-    nav.tabs button{ border:none; background:#ecfbf6; color:#0b4d3f; padding:10px 16px; border-radius:999px; font-weight:800; cursor:pointer; box-shadow:inset 0 0 0 1px #d8efe8; font-family:'Poppins','Rubik Rounded',sans-serif }
-
-    .grid-3{ display:grid; gap:18px; grid-template-columns:1fr }
-    @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr) } }
-    .feat-card{ background:#ffffff; border:1px solid #e6f1ec; border-radius:18px; padding:18px; box-shadow:var(--shadow) }
-    .feat-card h3{ margin:0 0 8px; font-size:18px; color:#0a372d; font-family:'Poppins','Rubik Rounded',sans-serif }
-    .feat-card p{ margin:0; color:#335a52; font-size:14px }
-
+    /* Modales */
+    .modal{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22); z-index:50 }
     .hide{ display:none !important }
+
+    /* Mensajes */
+    .banner{ display:none; background:#fff7ed; border:1px solid #ffedd5; color:#7c3a13; padding:10px 12px; border-radius:12px; margin:10px 0; font-weight:700 }
+    .banner.show{ display:block }
+
     .muted{ color:#40675e; font-size:13px }
     .center{ text-align:center }
     .stack-10{ display:grid; gap:10px }
@@ -99,14 +108,16 @@
 </head>
 <body>
 
-  <!-- Topbar (visible al iniciar sesión) -->
-  <header id="topbar" class="hide" role="banner">
-    <div class="tb">
-      <div class="brand" aria-label="ProteeMVT" style="display:none"></div>
-      <div class="tb-actions">
-        <span id="userBadge" class="badge-email" aria-live="polite"></span>
-        <button id="btnProfile" class="btn btn-soft" type="button" aria-haspopup="dialog" aria-controls="profileModal">Tu perfil</button>
-        <button id="btnHeaderLogout" class="btn" type="button">Salir</button>
+  <!-- ===== Header del sitio (logo + nombre) ===== -->
+  <header class="site">
+    <div class="site-inner">
+      <a class="brand" href="#" aria-label="Inicio">
+        <span class="logo" aria-hidden="true"></span>
+        <span class="brand-name">Prouti</span>
+      </a>
+      <div class="site-actions">
+        <span id="cfgStatus" class="pill">Estado: <span id="cfgState">OK</span></span>
+        <button id="btnOpenConfig" class="btn btn-soft" type="button">Configurar conexión</button>
       </div>
     </div>
   </header>
@@ -118,7 +129,6 @@
         <!-- Columna izquierda: título -->
         <div>
           <h1 id="heroGuestTitle" class="display">Nutrición simple, progreso real</h1>
-          <p class="subbrand">ProteeMVT</p>
           <p class="lead">Calcula tus macros, registra lo que comes y mide tu avance.</p>
         </div>
 
@@ -126,6 +136,7 @@
         <aside class="card access-card" aria-labelledby="accessTitle">
           <h2 id="accessTitle">Acceso</h2>
           <p class="muted">Elige una opción para continuar.</p>
+          <div id="authBanner" class="banner">Conexión inválida con la base de datos. Revisa la configuración.</div>
           <div class="stack-10">
             <button id="btnOpenSignup" class="btn btn-primary" type="button">Regístrate aquí</button>
             <button id="btnOpenLogin" class="btn btn-soft" type="button">Iniciar sesión</button>
@@ -151,191 +162,244 @@
         <button class="btn" type="button" onclick="logout()">Cerrar sesión</button>
       </div>
     </section>
-
-    <!-- Beneficios al final (opcional, puedes quitar si no los quieres) -->
-    <section id="beneficios-final" class="grid-3" aria-label="Beneficios principales" style="margin-top:28px">
-      <article class="feat-card"><h3>🎯 Objetivo claro</h3><p>Define metas y la app traduce a acciones simples: proteínas, calorías y hábitos.</p></article>
-      <article class="feat-card"><h3>🍽️ Registro sin fricción</h3><p>Agrega lo que comes en segundos y consulta valores clave sin perder el foco.</p></article>
-      <article class="feat-card"><h3>📈 Progreso motivador</h3><p>Gráficos limpios con métricas que importan para sostener el hábito.</p></article>
-    </section>
   </main>
 
-  <!-- MODALES: Signup / Login -->
-  <div id="signupModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
-      <div class="card" style="max-width:460px;width:100%">
-        <h2 id="signupTitle">Crear cuenta</h2>
-        <div class="stack-12" style="margin-top:8px">
-          <div>
-            <label for="suEmail">Correo</label>
-            <input id="suEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
-          </div>
-          <div>
-            <label for="suPass">Contraseña</label>
-            <input id="suPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
-          </div>
+  <!-- MODALES: Config / Signup / Login / Perfil -->
+  <div id="configModal" class="modal hide" role="dialog" aria-modal="true" aria-labelledby="cfgTitle">
+    <div class="card" style="max-width:560px;width:100%">
+      <h2 id="cfgTitle">Configurar conexión</h2>
+      <p class="muted">Pega aquí el <b>URL</b> y la <b>Anon Key</b> de tu proyecto Supabase. Quedan guardadas localmente.</p>
+      <div class="stack-12" style="margin-top:8px">
+        <div>
+          <label for="cfgUrl">SUPABASE_URL</label>
+          <input id="cfgUrl" type="url" placeholder="https://dnygudxhimjksxedzckl.supabase.co" />
         </div>
-        <p id="suMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
-        <div class="row" style="margin-top:12px;justify-content:flex-end">
-          <button id="btnCloseSignup" class="btn" type="button">Cancelar</button>
-          <button id="btnDoSignup" class="btn btn-primary" type="button">Crear cuenta</button>
+        <div>
+          <label for="cfgKey">SUPABASE_ANON_KEY</label>
+          <input id="cfgKey" type="text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njc3MDk1MSwiZXhwIjoyMDcyMzQ2OTUxfQ.VC46pebXQqwwj7wSsH9WCeiEoFuGMXYcv3yTIgsYcxU" />
         </div>
       </div>
-    </section>
+      <div id="cfgMsg" class="muted" style="margin-top:8px"></div>
+      <div class="row" style="margin-top:12px;justify-content:space-between">
+        <button id="btnCfgClear" class="btn btn-danger" type="button">Borrar config</button>
+        <div>
+          <button id="btnCfgClose" class="btn" type="button">Cancelar</button>
+          <button id="btnCfgSave" class="btn btn-primary" type="button">Guardar y probar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div id="loginModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
-      <div class="card" style="max-width:460px;width:100%">
-        <h2 id="loginTitle">Iniciar sesión</h2>
-        <div class="stack-12" style="margin-top:8px">
-          <div>
-            <label for="liEmail">Correo</label>
-            <input id="liEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
-          </div>
-          <div>
-            <label for="liPass">Contraseña</label>
-            <input id="liPass" type="password" placeholder="Tu contraseña" autocomplete="current-password" />
-          </div>
+  <div id="signupModal" class="modal hide" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+    <div class="card" style="max-width:460px;width:100%">
+      <h2 id="signupTitle">Crear cuenta</h2>
+      <div class="stack-12" style="margin-top:8px">
+        <div>
+          <label for="suEmail">Correo</label>
+          <input id="suEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
         </div>
-        <p id="liMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
-        <div class="row" style="margin-top:12px;justify-content:space-between">
-          <button id="btnForgot" class="btn btn-soft" type="button">Olvidé mi contraseña</button>
-          <div>
-            <button id="btnCloseLogin" class="btn" type="button">Cancelar</button>
-            <button id="btnDoLogin" class="btn btn-primary" type="button">Entrar</button>
-          </div>
+        <div>
+          <label for="suPass">Contraseña</label>
+          <input id="suPass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
         </div>
       </div>
-    </section>
+      <p id="suMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
+      <div class="row" style="margin-top:12px;justify-content:flex-end">
+        <button id="btnCloseSignup" class="btn" type="button">Cancelar</button>
+        <button id="btnDoSignup" class="btn btn-primary" type="button">Crear cuenta</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Perfil -->
-  <div id="profileModal" class="hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-    <section class="wrap" style="position:fixed; inset:0; display:grid; place-items:center; background:rgba(2,16,13,.22)">
-      <div class="card" style="max-width:460px;width:100%">
-        <h2 id="profileTitle">Tu perfil</h2>
-        <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
-        <div class="stack-12" style="margin-top:10px">
-          <div>
-            <label for="profEmail">Correo</label>
-            <input id="profEmail" type="email" disabled />
-          </div>
-          <div>
-            <label for="profName">Nombre visible</label>
-            <input id="profName" type="text" placeholder="Tu nombre" />
-          </div>
+  <div id="loginModal" class="modal hide" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="card" style="max-width:460px;width:100%">
+      <h2 id="loginTitle">Iniciar sesión</h2>
+      <div class="stack-12" style="margin-top:8px">
+        <div>
+          <label for="liEmail">Correo</label>
+          <input id="liEmail" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
         </div>
-        <div class="row" style="margin-top:12px;justify-content:flex-end">
-          <button id="btnCloseProfile" class="btn" type="button">Cerrar</button>
-          <button id="btnSaveProfile" class="btn btn-primary" type="button">Guardar</button>
+        <div>
+          <label for="liPass">Contraseña</label>
+          <input id="liPass" type="password" placeholder="Tu contraseña" autocomplete="current-password" />
         </div>
-        <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
       </div>
-    </section>
+      <p id="liMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
+      <div class="row" style="margin-top:12px;justify-content:space-between">
+        <button id="btnForgot" class="btn btn-soft" type="button">Olvidé mi contraseña</button>
+        <div>
+          <button id="btnCloseLogin" class="btn" type="button">Cancelar</button>
+          <button id="btnDoLogin" class="btn btn-primary" type="button">Entrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal hide" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="card" style="max-width:460px;width:100%">
+      <h2 id="profileTitle">Tu perfil</h2>
+      <p class="muted" style="margin-top:4px">Tu correo y nombre visible dentro de la app.</p>
+      <div class="stack-12" style="margin-top:10px">
+        <div>
+          <label for="profEmail">Correo</label>
+          <input id="profEmail" type="email" disabled />
+        </div>
+        <div>
+          <label for="profName">Nombre visible</label>
+          <input id="profName" type="text" placeholder="Tu nombre" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px;justify-content:flex-end">
+        <button id="btnCloseProfile" class="btn" type="button">Cerrar</button>
+        <button id="btnSaveProfile" class="btn btn-primary" type="button">Guardar</button>
+      </div>
+      <p id="profMsg" class="muted" style="margin-top:8px" role="status" aria-live="polite"></p>
+    </div>
   </div>
 
   <footer class="wrap" aria-label="Información legal">
-    <p class="muted">© <span id="year"></span> ProteeMVT. Todos los derechos reservados.</p>
+    <p class="muted">© <span id="year"></span> Prouti. Todos los derechos reservados.</p>
   </footer>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const { createClient } = supabase;
 
-    const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhmaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ===== Config runtime (para resolver “Invalid API key” sin exponer claves):
+    const STORAGE_KEYS = { url: 'prouti.sb.url', key: 'prouti.sb.key' };
+    function getCfg(){ return { url: localStorage.getItem(STORAGE_KEYS.url)||'', key: localStorage.getItem(STORAGE_KEYS.key)||'' } }
+    function setCfg(url, key){ localStorage.setItem(STORAGE_KEYS.url, url); localStorage.setItem(STORAGE_KEYS.key, key) }
+    function clearCfg(){ localStorage.removeItem(STORAGE_KEYS.url); localStorage.removeItem(STORAGE_KEYS.key) }
+    function looksLikeJwt(k){ return typeof k==='string' && k.split('.').length===3 }
+    function looksLikeUrl(u){ return /^https:\\/\\/[\\w-]+\\.supabase\\.co$/.test(u) }
 
+    let sb = null; // cliente supabase
+
+    function initSupabase(){
+      const cfg = getCfg();
+      const ok = looksLikeUrl(cfg.url) && looksLikeJwt(cfg.key);
+      document.getElementById('cfgState').textContent = ok ? 'OK' : 'Config requerida';
+      document.getElementById('authBanner').classList.toggle('show', !ok);
+      [ 'btnOpenSignup','btnOpenLogin','btnDoSignup','btnDoLogin','btnForgot' ].forEach(id=>{
+        const el = document.getElementById(id); if(el) el.disabled = !ok;
+      });
+      if(ok){ sb = createClient(cfg.url, cfg.key); }
+      return ok;
+    }
+
+    // ===== Utilidades UI
     const $ = (id)=>document.getElementById(id);
     const show = (id)=>$(id).classList.remove('hide');
     const hide = (id)=>$(id).classList.add('hide');
+    function openModal(id){ show(id); document.body.style.overflow='hidden' }
+    function closeModal(id){ hide(id); document.body.style.overflow='' }
+    function showSection(sec){ ['resumen','comidas','progreso'].forEach(id=>$(id).classList.toggle('hide', id!==sec)) }
 
-    function showSection(sec){ ["resumen","comidas","progreso"].forEach(id=>$(id).classList.toggle("hide", id!==sec)); }
+    // ===== Estado de sesión
+    async function getUser(){ if(!sb) return null; const { data:{ user } } = await sb.auth.getUser(); return user||null }
+    async function getProfile(userId){ if(!sb) return null; const { data } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); return data||null }
+    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ await sb.from('profiles').insert({ id:user.id, display_name:user.email }); prof = await getProfile(user.id); openModal('profileModal'); } return prof }
+    function setLoggedUI(){ hide('hero-guest'); show('dashboard'); }
+    function setGuestUI(){ show('hero-guest'); hide('dashboard'); }
 
-    // ====== Modales helpers
-    function openModal(id){ show(id); document.body.style.overflow='hidden'; }
-    function closeModal(id){ hide(id); document.body.style.overflow=''; }
-
-    // ====== Perfil API
-    async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
-    async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.error(error); return null; } return data||null; }
-    async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.error(error); prof = await getProfile(user.id); openModal('profileModal'); } return prof; }
-
-    function setLoggedUI({ user, profile }){
-      show("topbar"); // header visible
-      hide("hero-guest");
-      show("dashboard");
-      $("userBadge").textContent = user.email;
-    }
-    function setGuestUI(){ hide("topbar"); show("hero-guest"); hide("dashboard"); }
-
-    async function afterLoginShowApp(){ const user = await getUser(); if(!user){ setGuestUI(); return; } const profile = await ensureProfile(); setLoggedUI({ user, profile }); }
-
-    // ====== Botones acceso
-    $("btnOpenSignup").onclick = ()=> openModal('signupModal');
-    $("btnOpenLogin").onclick = ()=> openModal('loginModal');
-
-    // ====== Signup
-    $("btnCloseSignup").onclick = ()=> closeModal('signupModal');
-    $("btnDoSignup").onclick = async ()=>{
-      const email = ( $("suEmail").value || '' ).trim();
-      const password = ( $("suPass").value || '' ).trim();
-      const msg = $("suMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
-      if(password.length < 6){ msg.textContent='La contraseña debe tener al menos 6 caracteres.'; return; }
-      const { data, error } = await sb.auth.signUp({ email, password });
-      if(error){ msg.textContent = 'Error: '+error.message; return; }
-      if(data?.user && !data.session){ msg.textContent='Cuenta creada. Revisa tu correo para confirmar.'; }
-      else{ msg.textContent='Cuenta creada y sesión iniciada ✅'; closeModal('signupModal'); await afterLoginShowApp(); }
+    // ===== Header acciones
+    document.getElementById('btnOpenConfig').onclick = ()=>{
+      const {url,key}=getCfg();
+      document.getElementById('cfgUrl').value=url;
+      document.getElementById('cfgKey').value=key;
+      document.getElementById('cfgMsg').textContent='';
+      openModal('configModal');
+    };
+    document.getElementById('btnCfgClose').onclick = ()=> closeModal('configModal');
+    document.getElementById('btnCfgClear').onclick = ()=>{ clearCfg(); document.getElementById('cfgMsg').textContent='Configuración borrada.'; initSupabase(); };
+    document.getElementById('btnCfgSave').onclick = async ()=>{
+      const url = (document.getElementById('cfgUrl').value||'').trim();
+      const key = (document.getElementById('cfgKey').value||'').trim();
+      if(!looksLikeUrl(url)){ document.getElementById('cfgMsg').textContent='URL no válida (debe ser https://xxxxx.supabase.co)'; return }
+      if(!looksLikeJwt(key)){ document.getElementById('cfgMsg').textContent='Anon Key parece inválida (formato JWT)'; return }
+      setCfg(url,key);
+      const ok = initSupabase();
+      if(!ok){ document.getElementById('cfgMsg').textContent='No se pudo inicializar.'; return }
+      try{
+        await sb.auth.getSession(); // ping
+        document.getElementById('cfgMsg').textContent='Conexión OK ✅';
+        setTimeout(()=> closeModal('configModal'), 600);
+      }catch(e){
+        document.getElementById('cfgMsg').textContent='No pudimos validar: '+(e?.message||e);
+      }
     };
 
-    // ====== Login
-    $("btnCloseLogin").onclick = ()=> closeModal('loginModal');
-    $("btnDoLogin").onclick = async ()=>{
-      const email = ( $("liEmail").value || '' ).trim();
-      const password = ( $("liPass").value || '' ).trim();
-      const msg = $("liMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return; }
-      if(!password){ msg.textContent='Ingresa tu contraseña.'; return; }
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if(error){ msg.textContent = 'No pudimos iniciar sesión: '+error.message; return; }
-      msg.textContent='Sesión iniciada ✅';
-      closeModal('loginModal');
-      await afterLoginShowApp();
+    // ===== Signup
+    document.getElementById('btnOpenSignup').onclick = ()=> openModal('signupModal');
+    document.getElementById('btnCloseSignup').onclick = ()=> closeModal('signupModal');
+    document.getElementById('btnDoSignup').onclick = async ()=>{
+      if(!sb){ document.getElementById('suMsg').textContent='Configura la conexión primero.'; return }
+      const email = (document.getElementById('suEmail').value||'').trim();
+      const password = (document.getElementById('suPass').value||'').trim();
+      const msg = document.getElementById('suMsg'); msg.textContent='';
+      if(!/.+@.+\\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return }
+      if(password.length < 6){ msg.textContent='La contraseña debe tener al menos 6 caracteres.'; return }
+      try{
+        const { data, error } = await sb.auth.signUp({ email, password });
+        if(error) throw error;
+        if(data?.user && !data.session){ msg.textContent='Cuenta creada. Revisa tu correo para confirmar.'; }
+        else{ msg.textContent='Cuenta creada y sesión iniciada ✅'; closeModal('signupModal'); await afterLoginShowApp(); }
+      }catch(e){ msg.textContent = 'Error: '+(e?.message||e) }
     };
 
-    // ====== Forgot password
-    $("btnForgot").onclick = async ()=>{
-      const email = ( $("liEmail").value || '' ).trim();
-      const msg = $("liMsg"); msg.textContent='';
-      if(!/.+@.+\..+/.test(email)){ msg.textContent='Escribe el correo que usaste para registrarte.'; return; }
+    // ===== Login
+    document.getElementById('btnOpenLogin').onclick = ()=> openModal('loginModal');
+    document.getElementById('btnCloseLogin').onclick = ()=> closeModal('loginModal');
+    document.getElementById('btnDoLogin').onclick = async ()=>{
+      if(!sb){ document.getElementById('liMsg').textContent='Configura la conexión primero.'; return }
+      const email = (document.getElementById('liEmail').value||'').trim();
+      const password = (document.getElementById('liPass').value||'').trim();
+      const msg = document.getElementById('liMsg'); msg.textContent='';
+      if(!/.+@.+\\..+/.test(email)){ msg.textContent='Ingresa un correo válido.'; return }
+      if(!password){ msg.textContent='Ingresa tu contraseña.'; return }
+      try{
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if(error) throw error;
+        msg.textContent='Sesión iniciada ✅';
+        closeModal('loginModal');
+        await afterLoginShowApp();
+      }catch(e){
+        if(String(e?.message||'').toLowerCase().includes('invalid api key')){
+          document.getElementById('authBanner').classList.add('show');
+          document.getElementById('cfgState').textContent='Config requerida';
+          msg.textContent='Clave/API inválida. Abre "Configurar conexión" y pega tus credenciales.';
+        }else{
+          msg.textContent = 'No pudimos iniciar sesión: '+(e?.message||e);
+        }
+      }
+    };
+
+    // Forgot password
+    document.getElementById('btnForgot').onclick = async ()=>{
+      if(!sb){ document.getElementById('liMsg').textContent='Configura la conexión primero.'; return }
+      const email = (document.getElementById('liEmail').value||'').trim();
+      const msg = document.getElementById('liMsg'); msg.textContent='';
+      if(!/.+@.+\\..+/.test(email)){ msg.textContent='Escribe el correo que usaste para registrarte.'; return }
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
       msg.textContent = error ? ('No se pudo enviar: '+error.message) : 'Te enviamos un enlace para restablecer tu contraseña ✅';
     };
 
-    async function logout(){ await sb.auth.signOut(); setGuestUI(); }
-    $("btnHeaderLogout").onclick = logout;
+    async function logout(){ if(sb) await sb.auth.signOut(); setGuestUI(); }
 
-    // ====== Perfil
-    $("btnProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const profile = await getProfile(user.id); $("profEmail").value = user.email || ''; $("profName").value = profile?.display_name || ''; openModal('profileModal'); };
-    $("btnCloseProfile").onclick = ()=> closeModal('profileModal');
-    $("btnSaveProfile").onclick = async ()=>{ const user = await getUser(); if(!user) return; const display_name = ( $("profName").value || '' ).trim() || user.email; const { error } = await sb.from('profiles').upsert({ id:user.id, display_name }); $("profMsg").textContent = error ? ('Error: '+error.message) : 'Guardado ✅'; };
+    async function afterLoginShowApp(){ const user = await getUser(); if(!user){ setGuestUI(); return } const profile = await ensureProfile(); setLoggedUI({ user, profile }) }
 
-    // ====== Restaurar sesión desde enlaces de email
     (async ()=>{
-      $("year").textContent = new Date().getFullYear();
-      const hash = window.location.hash || "";
-      if(hash.includes("access_token") && hash.includes("refresh_token")){
+      document.getElementById('year').textContent = new Date().getFullYear();
+      // Inicializar supabase con posibles credenciales guardadas
+      initSupabase();
+      // Restaurar sesión desde hash
+      const hash = window.location.hash || '';
+      if(hash.includes('access_token') && hash.includes('refresh_token') && sb){
         const p = new URLSearchParams(hash.substring(1));
-        await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
+        await sb.auth.setSession({ access_token: p.get('access_token'), refresh_token: p.get('refresh_token') });
         history.replaceState({}, document.title, window.location.pathname);
       }
-      if(hash.includes("type=recovery")){
-        // Si viene desde email de recuperación, abrir modal de login para que establezca nueva pass si el flujo lo pide
-        openModal('loginModal');
-      }
-      const { data:{ user } } = await sb.auth.getUser();
+      const user = await getUser();
       if(user) await afterLoginShowApp(); else setGuestUI();
     })();
   </script>
