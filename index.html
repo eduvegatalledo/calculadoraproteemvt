@@ -395,7 +395,13 @@
   const { createClient } = supabase;
   const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: true
+    }
+  });
+  let memSession = null;
 
   const $ = (id)=>document.getElementById(id);
   const show = (id)=>$(id).classList.remove('hide');
@@ -406,7 +412,13 @@
   const LS = { get:(k,f)=>{ try{ return JSON.parse(localStorage.getItem(k))??f }catch{ return f } }, set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)), del:(k)=>localStorage.removeItem(k) };
 
   // --- Perfil
-  async function getUser(){ const { data:{ user } } = await sb.auth.getUser(); return user||null; }
+  async function getSession(){
+    if(memSession) return memSession;
+    const { data } = await sb.auth.getSession();
+    memSession = data.session;
+    return memSession;
+  }
+  async function getUser(){ const session = await getSession(); return session?.user||null; }
   async function getProfile(userId){ const { data, error } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle(); if(error){ console.warn('profiles select', error.message); return null } return data||null }
   async function ensureProfile(){ const user = await getUser(); if(!user) return null; let prof = await getProfile(user.id); if(!prof){ const { error } = await sb.from('profiles').insert({ id:user.id, display_name:user.email }); if(error) console.warn('profiles insert', error.message); prof = await getProfile(user.id) } return prof }
   function setLoggedUI(user){ show('topbar'); hide('hero-guest'); show('dashboard'); $('userBadge').textContent=user.email }
@@ -455,7 +467,7 @@
   function closeModal(id){ hide(id); document.body.style.overflow='' }
   async function openProfileModal(){ const user=await getUser(); if(!user) return; const profile=await getProfile(user.id); $('profEmail').value=user.email||''; $('profName').value=profile?.display_name||''; openModal('profileModal') }
   $('btnSaveProfile').addEventListener('click', async ()=>{ const user=await getUser(); if(!user) return; const display_name=( $('profName').value||'' ).trim()||user.email; const { error }=await sb.from('profiles').upsert({ id:user.id, display_name }); $('profMsg').textContent= error?('Error: '+error.message):'Guardado ✅' });
-  async function logout(){ await sb.auth.signOut(); setGuestUI(); toast('Sesión cerrada') }
+  async function logout(){ await sb.auth.signOut(); memSession=null; setGuestUI(); toast('Sesión cerrada') }
 
   // --- Boot
   (async ()=>{
@@ -464,9 +476,10 @@
     if(hash.includes('access_token')&&hash.includes('refresh_token')){ const p=new URLSearchParams(hash.substring(1)); await sb.auth.setSession({ access_token:p.get('access_token'), refresh_token:p.get('refresh_token') }); history.replaceState({},document.title,window.location.pathname) }
     if(hash.includes('type=recovery')) openModal('loginModal');
 
-    sb.auth.onAuthStateChange(async (event, session)=>{ const user=session?.user||null; if(user){ setLoggedUI(user); await ensureProfile(); closeModal('loginModal'); closeModal('signupModal'); toast('Sesión iniciada') } else { setGuestUI() } });
+    sb.auth.onAuthStateChange(async (event, session)=>{ memSession=session; const user=session?.user||null; if(user){ setLoggedUI(user); await ensureProfile(); closeModal('loginModal'); closeModal('signupModal'); toast('Sesión iniciada') } else { setGuestUI() } });
 
-    const { data:{ user } } = await sb.auth.getUser();
+    await getSession();
+    const user = await getUser();
     if(user){ setLoggedUI(user); await ensureProfile() } else { setGuestUI() }
     setTab('resumen'); renderFoods(''); renderDay(); renderSummary(); renderAdherence();
   })();

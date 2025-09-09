@@ -1,0 +1,12 @@
+{
+  "name": "calculadoraproteemvt",
+  "version": "1.0.0",
+  "description": "Calculadora nutricional con Supabase",
+  "main": "index.js",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "scripts": {
+    "test": "echo 'no test specified' && exit 0"
+  }
+}
