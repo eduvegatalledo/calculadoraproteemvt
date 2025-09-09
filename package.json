@@ -1,6 +1,7 @@
 {
   "name": "calculadoraproteemvt",
   "version": "1.0.0",
+ codex/initialize-supabase-with-in-memory-tokens
   "description": "Calculadora nutricional con Supabase",
   "main": "index.js",
   "dependencies": {
@@ -8,5 +9,20 @@
   },
   "scripts": {
     "test": "echo 'no test specified' && exit 0"
+
+  "description": "Proyecto de calculadora nutricional listo para deploy en Vercel.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
+ main
   }
 }
