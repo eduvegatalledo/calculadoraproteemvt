@@ -390,13 +390,16 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.1/dist/umd/supabase.min.js"
+    integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"
+    crossorigin="anonymous"></script>
+  <script src="/api/env.js"></script>
   <script>
   const { createClient } = supabase;
-  const SUPABASE_URL = "https://dnygudxhimjksxedzckl.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRueWd1ZHhoaW1qa3N4ZWR6Y2tsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NzA5NTEsImV4cCI6MjA3MjM0Njk1MX0.VysJaMOWnPpkg0ty4F68C5G_fI7gw8iabDL4SE_mzWI";
+  const SUPABASE_URL = window.env.SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.env.SUPABASE_ANON_KEY;
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  
   const $ = (id)=>document.getElementById(id);
   const show = (id)=>$(id).classList.remove('hide');
   const hide = (id)=>$(id).classList.add('hide');
