@@ -1,9 +1,16 @@
 {
   "version": 2,
   "name": "calculadoraproteemvt",
+codex/initialize-supabase-with-in-memory-tokens
+  "builds": [
+    {"src": "index.html", "use": "@vercel/static"},
+    {"src": "api/*.js", "use": "@vercel/node"}
+  ]
+
   "builds": [{"src": "index.html", "use": "@vercel/static"}],
   "env": {
     "SUPABASE_URL": "@supabase-url",
     "SUPABASE_ANON_KEY": "@supabase-anon-key"
   }
+main
 }
