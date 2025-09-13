@@ -370,7 +370,7 @@ codex/refactorizar-logica-en-modulos
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-codex/move-supabase-variables-to-environment
+  codex/move-supabase-variables-to-environment
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.1/dist/umd/supabase.min.js"
     integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"
     crossorigin="anonymous"></script>
@@ -413,8 +413,14 @@ codex/move-supabase-variables-to-environment
   function calcAndRender(){ const sex=$('sex').value, age=+$('age').value, height=+$('height').value, weight=+$('weight').value; const activity=+$('activity').value, goal=$('goal').value; const proteinGPerKg=+$('protein').value, fatPct=+$('fatPct').value; if(!sex||!age||!height||!weight||!activity||!goal||!proteinGPerKg||!fatPct){ $('calcMsg').textContent='Completa todos los campos.'; return } if(fatPct<15||fatPct>40){ $('calcMsg').textContent='El % de grasa debe estar entre 15% y 40%.'; return } const bmr=mifflinStJeor({sex,age,height,weight}); const kcal=goalAdj(tdee({bmr,activity}),goal); const out=splitMacros({weight,kcal,proteinGPerKg,fatPct}); $('outKcal').textContent=fmt(out.kcal); $('outProt').textContent=`${fmt(out.pG)} g`; $('outCarb').textContent=`${fmt(out.cG)} g`; $('outFat').textContent=`${fmt(out.fG)} g`; $('outFiber').textContent=`${fmt(out.fiber)} g`; show('calcOut'); $('calcMsg').textContent='Cálculo actualizado ✅'; LS.set('last_calc',{sex,age,height,weight,activity,goal,proteinGPerKg,fatPct,out,ts:Date.now()}) }
 
   // --- Foods & Diary
+ codex/validate-and-sanitize-numeric-inputs
+  function escapeHtml(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+  function numOrNull(v){ if(v===''||v==null) return 0; const n=parseFloat(v); return Number.isFinite(n)&&n>=0?n:null }
+  function normalizeFood(f){ return { id:f.id||crypto.randomUUID(), name:(f.name||'').trim(), brand:(f.brand||'').trim(), serving:numOrNull(f.serving), kcal:numOrNull(f.kcal), p:numOrNull(f.p), c:numOrNull(f.c), g:numOrNull(f.g), fi:numOrNull(f.fi) } }
+
   function escapeHtml(s){ return (s||'').replace(/[&<>"'\/]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#x27;','/':'&#x2F;'}[c])) }
   function normalizeFood(f){ return { id:f.id||crypto.randomUUID(), name:(f.name||'').trim(), brand:(f.brand||'').trim(), serving:+f.serving, kcal:+f.kcal, p:+f.p, c:+f.c, g:+f.g, fi:+f.fi } }
+main
   function saveFoodLocal(food){ const list=LS.get('foods',[]); const idx=list.findIndex(x=>x.name.toLowerCase()===food.name.toLowerCase() && x.brand.toLowerCase()===food.brand.toLowerCase()); if(idx>-1) list[idx]=food; else list.unshift(food); LS.set('foods',list); return food }
   async function saveFoodSupabase(food){ try{ const user=await getUser(); if(!user) return; await sb.from('foods').upsert({ user_id:user.id, food }) }catch(err){ console.warn('foods upsert', err?.message) } }
   function renderFoods(filter=''){ const tbody=$('foodsTable'); tbody.innerHTML=''; const list=LS.get('foods',[]); const q=(filter||'').toLowerCase(); list.filter(x=>x.name.toLowerCase().includes(q)||x.brand.toLowerCase().includes(q)).slice(0,200).forEach(f=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td><strong>${escapeHtml(f.name)}</strong> <small class="muted">${escapeHtml(f.brand||'')}</small></td><td>${fmt(f.serving)} g</td><td>${fmt(f.kcal)}</td><td>${fmt(f.p,1)}</td><td>${fmt(f.c,1)}</td><td>${fmt(f.g,1)}</td><td class="right"><button class="btn btn-soft" data-add="${f.id}">+ diario</button></td>`; tbody.appendChild(tr) }) }
@@ -431,8 +437,28 @@ codex/move-supabase-variables-to-environment
   $('macroForm').addEventListener('submit',(e)=>{ e.preventDefault(); calcAndRender() });
   $('btnSavePreset').addEventListener('click', async ()=>{ const last=LS.get('last_calc'); if(!last){ toast('Primero calcula tus macros.'); return } const presets=LS.get('presets',[]); presets.unshift({ id:crypto.randomUUID(), ...last }); LS.set('presets',presets); toast('Preset guardado.'); try{ const user=await getUser(); if(user){ await sb.from('macro_presets').insert({ user_id:user.id, payload:last }) } }catch(err){ console.warn('macro_presets insert',err?.message) } });
   $('btnSetTodayTargets').addEventListener('click',()=>{ const last=LS.get('last_calc'); if(!last){ toast('Primero calcula y guarda un preset.'); return } LS.set('targets:'+todayKey(), last.out); toast('Metas de hoy actualizadas.'); renderSummary() });
-  $('foodForm').addEventListener('submit', async (e)=>{ e.preventDefault(); const food=normalizeFood({ name:$('fName').value, brand:$('fBrand').value, serving:$('fServing').value, kcal:$('fKcal').value, p:$('fProtein').value, c:$('fCarb').value, g:$('fFat').value, fi:$('fFiber').value }); if(!food.name||!food.serving){ $('foodMsg').textContent='Completa al menos nombre y ración.'; return } saveFoodLocal(food); renderFoods($('foodSearch').value); $('foodMsg').textContent='Alimento guardado ✅'; try{ await saveFoodSupabase(food) }catch{} });
-  $('btnLogFood').addEventListener('click',()=>{ const food=normalizeFood({ name:$('fName').value, brand:$('fBrand').value, serving:$('fServing').value, kcal:$('fKcal').value, p:$('fProtein').value, c:$('fCarb').value, g:$('fFat').value, fi:$('fFiber').value }); if(!food.name||!food.serving){ $('foodMsg').textContent='Completa al menos nombre y ración.'; return } saveFoodLocal(food); const qty=parseFloat($('logQty').value||'1')||1; logToDay(food,qty); toast('Registrado en el diario.'); renderFoods($('foodSearch').value) });
+  $('foodForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const food=normalizeFood({ name:$('fName').value, brand:$('fBrand').value, serving:$('fServing').value, kcal:$('fKcal').value, p:$('fProtein').value, c:$('fCarb').value, g:$('fFat').value, fi:$('fFiber').value });
+    if(!food.name||food.serving===null){ $('foodMsg').textContent='Completa al menos nombre y ración válida.'; return }
+    const invalid=['kcal','p','c','g','fi'].filter(k=>food[k]===null);
+    if(invalid.length){ $('foodMsg').textContent='Corrige valores: '+invalid.join(', '); return }
+    saveFoodLocal(food);
+    renderFoods($('foodSearch').value);
+    $('foodMsg').textContent='Alimento guardado ✅';
+    try{ await saveFoodSupabase(food) }catch{}
+  });
+  $('btnLogFood').addEventListener('click',()=>{
+    const food=normalizeFood({ name:$('fName').value, brand:$('fBrand').value, serving:$('fServing').value, kcal:$('fKcal').value, p:$('fProtein').value, c:$('fCarb').value, g:$('fFat').value, fi:$('fFiber').value });
+    if(!food.name||food.serving===null){ $('foodMsg').textContent='Completa al menos nombre y ración válida.'; return }
+    const invalid=['kcal','p','c','g','fi'].filter(k=>food[k]===null);
+    if(invalid.length){ $('foodMsg').textContent='Corrige valores: '+invalid.join(', '); return }
+    saveFoodLocal(food);
+    const qty=parseFloat($('logQty').value||'1')||1;
+    logToDay(food,qty);
+    toast('Registrado en el diario.');
+    renderFoods($('foodSearch').value)
+  });
 
   // --- Modales & sesión
   function openModal(id){ show(id); document.body.style.overflow='hidden' }
